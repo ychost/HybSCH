@@ -1,0 +1,456 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        08/23/2016  18:57:39  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\OutHex\STARTUP.obj, .\OutHex\Main.obj, .\OutHex\PreMacro.obj, .\OutHex\HybSCH.obj TO .\Out
+>> Hex\Demo PRINT (.\Listings\Demo.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\OutHex\STARTUP.obj (?C_STARTUP)
+  .\OutHex\Main.obj (MAIN)
+  .\OutHex\PreMacro.obj (PREMACRO)
+  .\OutHex\HybSCH.obj (HYBSCH)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ICALL)
+
+
+LINK MAP OF MODULE:  .\OutHex\Demo (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0014H     UNIT         ?DT?HYBSCH
+            DATA    001CH     0001H     UNIT         ?DT?MAIN
+                    001DH     0003H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?MAIN
+            BIT     0020H.1   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.2   0000H.6                *** GAP ***
+            DATA    0021H     0008H     UNIT         _DATA_GROUP_
+            IDATA   0029H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0028H     UNIT         ?PR?LED_LONG_FLASH?MAIN
+            CODE    002BH     0003H     ABSOLUTE     
+            CODE    002EH     00F3H     UNIT         ?PR?HSCH_UPDATE?HYBSCH
+            CODE    0121H     008CH     UNIT         ?C_C51STARTUP
+            CODE    01ADH     0065H     UNIT         ?PR?_HSCH_ADD_TASK?HYBSCH
+            CODE    0212H     0061H     UNIT         ?PR?HSCH_DISPATCH_TASKS?HYBSCH
+            CODE    0273H     0049H     UNIT         ?PR?_HSCH_DELETE_TASK?HYBSCH
+            CODE    02BCH     0037H     UNIT         ?PR?HSCH_REPORT_STATUS?HYBSCH
+            CODE    02F3H     002CH     UNIT         ?PR?MAIN?MAIN
+            CODE    031FH     0029H     UNIT         ?PR?_HARD_DELAY_MS?PREMACRO
+            CODE    0348H     0024H     UNIT         ?PR?HSCH_INIT_TIMMER2?HYBSCH
+            CODE    036CH     0013H     UNIT         ?PR?_SOFT_DELAY_MS?PREMACRO
+            CODE    037FH     000AH     UNIT         ?PR?LED_SHORT_FLASH?MAIN
+            CODE    0389H     0006H     UNIT         ?C_INITSEG
+            CODE    038FH     0006H     UNIT         ?C?LIB_CODE
+            CODE    0395H     0004H     UNIT         ?PR?HSCH_TO_SLEEP?HYBSCH
+            CODE    0399H     0003H     UNIT         ?PR?HSCH_START?HYBSCH
+
+
+
+OVERLAY MAP OF MODULE:   .\OutHex\Demo (?C_STARTUP)
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 2
+
+
+
+SEGMENT                                   BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT                  START    LENGTH     START    LENGTH
+--------------------------------------------------------------------------
+?C_C51STARTUP                          -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                          -----    -----      -----    -----
+  +--> ?PR?HSCH_INIT_TIMMER2?HYBSCH
+  +--> ?PR?LED_SHORT_FLASH?MAIN
+  +--> ?PR?_HSCH_ADD_TASK?HYBSCH
+  +--> ?PR?LED_LONG_FLASH?MAIN
+  +--> ?PR?HSCH_START?HYBSCH
+  +--> ?PR?HSCH_DISPATCH_TASKS?HYBSCH
+
+?PR?HSCH_INIT_TIMMER2?HYBSCH           -----    -----      -----    -----
+  +--> ?PR?_HSCH_DELETE_TASK?HYBSCH
+
+?PR?_HSCH_DELETE_TASK?HYBSCH           0020H.1  0000H.1    -----    -----
+
+?PR?_HSCH_ADD_TASK?HYBSCH              -----    -----      0021H    0007H
+
+?PR?LED_LONG_FLASH?MAIN                -----    -----      -----    -----
+  +--> ?PR?_HARD_DELAY_MS?PREMACRO
+
+?PR?HSCH_DISPATCH_TASKS?HYBSCH         -----    -----      0021H    0001H
+  +--> ?PR?_HSCH_DELETE_TASK?HYBSCH
+  +--> ?PR?HSCH_REPORT_STATUS?HYBSCH
+  +--> ?PR?HSCH_TO_SLEEP?HYBSCH
+
+*** NEW ROOT ***************************************************
+
+?PR?HSCH_UPDATE?HYBSCH                 -----    -----      0028H    0001H
+
+
+
+SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0121H         SEGMENT       ?C_C51STARTUP
+  I:0029H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0124H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 3
+
+
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0121H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0121H         LINE#         133
+  C:0123H         LINE#         134
+  C:0124H         LINE#         135
+  C:0125H         LINE#         136
+  C:0127H         LINE#         185
+  C:012AH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  C:02F3H         PUBLIC        main
+  C:0003H         PUBLIC        led_long_flash
+  C:037FH         PUBLIC        led_short_flash
+  B:0020H.0       SYMBOL        led_lock
+  B:0090H.0       PUBLIC        LED
+  -------         PROC          LED_SHORT_FLASH
+  C:037FH         LINE#         14
+  C:037FH         LINE#         15
+  C:0382H         LINE#         17
+  C:0382H         LINE#         18
+  C:0384H         LINE#         19
+  C:0386H         LINE#         20
+  C:0388H         LINE#         21
+  -------         ENDPROC       LED_SHORT_FLASH
+  -------         PROC          LED_LONG_FLASH
+  -------         DO            
+  D:001CH         SYMBOL        i
+  -------         ENDDO         
+  C:0003H         LINE#         23
+  C:0003H         LINE#         25
+  C:0006H         LINE#         27
+  C:0006H         LINE#         28
+  C:0008H         LINE#         29
+  C:000BH         LINE#         31
+  C:000EH         LINE#         32
+  C:0015H         LINE#         33
+  C:0018H         LINE#         34
+  C:001FH         LINE#         35
+  C:0028H         LINE#         36
+  C:002AH         LINE#         37
+  -------         ENDPROC       LED_LONG_FLASH
+  -------         PROC          MAIN
+  C:02F3H         LINE#         39
+  C:02F3H         LINE#         40
+  C:02F3H         LINE#         41
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 4
+
+
+  C:02F6H         LINE#         44
+  C:0306H         LINE#         47
+  C:0317H         LINE#         49
+  C:031AH         LINE#         50
+  C:031AH         LINE#         51
+  C:031AH         LINE#         52
+  C:031DH         LINE#         53
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        PREMACRO
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.1       PUBLIC        ET0
+  B:0088H.5       PUBLIC        TF0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:031FH         PUBLIC        _hard_delay_ms
+  B:0088H.4       PUBLIC        TR0
+  C:036CH         PUBLIC        _soft_delay_ms
+  -------         PROC          _HARD_DELAY_MS
+  D:0006H         SYMBOL        t
+  -------         DO            
+  D:0004H         SYMBOL        ms
+  -------         ENDDO         
+  C:031FH         LINE#         24
+  C:031FH         LINE#         26
+  C:0322H         LINE#         27
+  C:0325H         LINE#         28
+  C:0327H         LINE#         29
+  C:0331H         LINE#         30
+  C:0334H         LINE#         31
+  C:0337H         LINE#         32
+  C:0339H         LINE#         33
+  C:033BH         LINE#         34
+  C:033EH         LINE#         35
+  C:0340H         LINE#         36
+  C:0347H         LINE#         37
+  -------         ENDPROC       _HARD_DELAY_MS
+  -------         PROC          _SOFT_DELAY_MS
+  D:0006H         SYMBOL        t
+  -------         DO            
+  D:0005H         SYMBOL        x
+  D:0004H         SYMBOL        y
+  -------         ENDDO         
+  C:036CH         LINE#         43
+  C:036CH         LINE#         45
+  C:0375H         LINE#         46
+  C:037BH         LINE#         47
+  C:037EH         LINE#         48
+  -------         ENDPROC       _SOFT_DELAY_MS
+  -------         ENDMOD        PREMACRO
+
+  -------         MODULE        HYBSCH
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  B:00A8H.7       PUBLIC        EA
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 5
+
+
+  C:002EH         PUBLIC        hsch_update
+  C:0273H         PUBLIC        _hsch_delete_task
+  D:00CBH         PUBLIC        RCAP2H
+  D:00CAH         PUBLIC        RCAP2L
+  D:0087H         PUBLIC        PCON
+  D:0008H         PUBLIC        hsch_tasks
+  C:02BCH         PUBLIC        hsch_report_status
+  D:0018H         SYMBOL        hsch_error_code
+  C:0399H         PUBLIC        hsch_start
+  D:0019H         SYMBOL        last_error_code
+  D:001AH         SYMBOL        error_tick_count
+  C:01ADH         PUBLIC        _hsch_add_task
+  B:00A8H.5       PUBLIC        ET2
+  B:00C8H.7       PUBLIC        TF2
+  D:00CDH         PUBLIC        TH2
+  D:00CCH         PUBLIC        TL2
+  B:00C8H.2       PUBLIC        TR2
+  C:0348H         PUBLIC        hsch_init_timmer2
+  D:00C9H         PUBLIC        T2MOD
+  D:00C8H         PUBLIC        T2CON
+  C:0212H         PUBLIC        hsch_dispatch_tasks
+  C:0395H         PUBLIC        hsch_to_sleep
+  -------         PROC          HSCH_DISPATCH_TASKS
+  -------         DO            
+  D:0021H         SYMBOL        i
+  -------         ENDDO         
+  C:0212H         LINE#         41
+  C:0212H         LINE#         42
+  C:0212H         LINE#         43
+  C:0215H         LINE#         44
+  C:0217H         LINE#         45
+  C:0217H         LINE#         46
+  C:0232H         LINE#         47
+  C:0232H         LINE#         48
+  C:0245H         LINE#         49
+  C:024FH         LINE#         51
+  C:025FH         LINE#         52
+  C:025FH         LINE#         53
+  C:0264H         LINE#         54
+  C:0264H         LINE#         55
+  C:0264H         LINE#         56
+  C:026DH         LINE#         57
+  C:0270H         LINE#         58
+  -------         ENDPROC       HSCH_DISPATCH_TASKS
+  -------         PROC          _HSCH_ADD_TASK
+  D:0021H         SYMBOL        func
+  D:0004H         SYMBOL        delay
+  D:0002H         SYMBOL        period
+  D:0027H         SYMBOL        co_cp
+  -------         DO            
+  D:0007H         SYMBOL        i
+  -------         ENDDO         
+  C:01ADH         LINE#         69
+  C:01B1H         LINE#         70
+  C:01B1H         LINE#         71
+  C:01B3H         LINE#         72
+  C:01CAH         LINE#         73
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 6
+
+
+  C:01CAH         LINE#         74
+  C:01CBH         LINE#         75
+  C:01CDH         LINE#         76
+  C:01D0H         LINE#         77
+  C:01D0H         LINE#         78
+  C:01D3H         LINE#         79
+  C:01D6H         LINE#         80
+  C:01D6H         LINE#         81
+  C:01E3H         LINE#         82
+  C:01F0H         LINE#         83
+  C:01FDH         LINE#         84
+  C:0207H         LINE#         85
+  C:0211H         LINE#         87
+  C:0211H         LINE#         88
+  -------         ENDPROC       _HSCH_ADD_TASK
+  -------         PROC          _HSCH_DELETE_TASK
+  D:0007H         SYMBOL        i
+  -------         DO            
+  B:0020H.1       SYMBOL        ret_code
+  -------         ENDDO         
+  C:0273H         LINE#         95
+  C:0273H         LINE#         96
+  C:0273H         LINE#         98
+  C:0282H         LINE#         99
+  C:0282H         LINE#         100
+  C:0285H         LINE#         101
+  C:0287H         LINE#         102
+  C:0289H         LINE#         104
+  C:0289H         LINE#         105
+  C:028BH         LINE#         106
+  C:028BH         LINE#         107
+  C:0297H         LINE#         108
+  C:02A3H         LINE#         109
+  C:02AFH         LINE#         110
+  C:02B9H         LINE#         112
+  C:02BBH         LINE#         113
+  -------         ENDPROC       _HSCH_DELETE_TASK
+  -------         PROC          HSCH_UPDATE
+  -------         DO            
+  D:0028H         SYMBOL        i
+  -------         ENDDO         
+  C:002EH         LINE#         118
+  C:004BH         LINE#         120
+  C:004EH         LINE#         121
+  C:0050H         LINE#         122
+  C:0053H         LINE#         123
+  C:0053H         LINE#         124
+  C:0066H         LINE#         125
+  C:0066H         LINE#         126
+  C:0076H         LINE#         127
+  C:0076H         LINE#         129
+  C:0082H         LINE#         130
+  C:0082H         LINE#         131
+  C:008CH         LINE#         132
+  C:008EH         LINE#         135
+  C:008EH         LINE#         136
+  C:00A1H         LINE#         137
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 7
+
+
+  C:00ABH         LINE#         138
+  C:00BBH         LINE#         139
+  C:00BBH         LINE#         140
+  C:00C9H         LINE#         141
+  C:00C9H         LINE#         142
+  C:00C9H         LINE#         144
+  C:00DAH         LINE#         145
+  C:00DAH         LINE#         146
+  C:00E8H         LINE#         148
+  C:00E8H         LINE#         150
+  C:00EAH         LINE#         153
+  C:00EAH         LINE#         154
+  C:00FAH         LINE#         155
+  C:00FAH         LINE#         156
+  C:00FAH         LINE#         158
+  C:0106H         LINE#         159
+  -------         ENDPROC       HSCH_UPDATE
+  -------         PROC          HSCH_INIT_TIMMER2
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0348H         LINE#         164
+  C:0348H         LINE#         165
+  C:0348H         LINE#         166
+  C:034AH         LINE#         167
+  C:034AH         LINE#         168
+  C:034AH         LINE#         169
+  C:034FH         LINE#         170
+  C:0353H         LINE#         171
+  C:0356H         LINE#         174
+  C:0359H         LINE#         175
+  C:035BH         LINE#         176
+  C:035EH         LINE#         177
+  C:0361H         LINE#         178
+  C:0364H         LINE#         179
+  C:0367H         LINE#         180
+  C:0369H         LINE#         181
+  C:036BH         LINE#         182
+  -------         ENDPROC       HSCH_INIT_TIMMER2
+  -------         PROC          HSCH_TO_SLEEP
+  C:0395H         LINE#         187
+  C:0395H         LINE#         188
+  C:0395H         LINE#         189
+  C:0398H         LINE#         190
+  -------         ENDPROC       HSCH_TO_SLEEP
+  -------         PROC          HSCH_START
+  C:0399H         LINE#         195
+  C:0399H         LINE#         196
+  C:0399H         LINE#         197
+  C:039BH         LINE#         198
+  -------         ENDPROC       HSCH_START
+  -------         PROC          HSCH_REPORT_STATUS
+  C:02BCH         LINE#         203
+  C:02BCH         LINE#         204
+  C:02BCH         LINE#         206
+  C:02C2H         LINE#         207
+  C:02C2H         LINE#         208
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/23/2016  18:57:39  PAGE 8
+
+
+  C:02C9H         LINE#         209
+  C:02CCH         LINE#         210
+  C:02D0H         LINE#         211
+  C:02D0H         LINE#         212
+  C:02D6H         LINE#         213
+  C:02D7H         LINE#         215
+  C:02D7H         LINE#         216
+  C:02DCH         LINE#         217
+  C:02DCH         LINE#         218
+  C:02DDH         LINE#         220
+  C:02DDH         LINE#         221
+  C:02E3H         LINE#         222
+  C:02E3H         LINE#         223
+  C:02F0H         LINE#         224
+  C:02F0H         LINE#         225
+  C:02F2H         LINE#         226
+  C:02F2H         LINE#         227
+  C:02F2H         LINE#         228
+  C:02F2H         LINE#         230
+  -------         ENDPROC       HSCH_REPORT_STATUS
+  -------         ENDMOD        HYBSCH
+
+  -------         MODULE        ?C?ICALL
+  C:038FH         PUBLIC        ?C?ICALL
+  C:0393H         PUBLIC        ?C?ICALL2
+  -------         ENDMOD        ?C?ICALL
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SOFT_DELAY_MS?PREMACRO
+
+Program Size: data=38.2 xdata=0 code=924
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

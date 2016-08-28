@@ -1,0 +1,6 @@
+".\OutHex\STARTUP.obj",
+".\OutHex\Main.obj",
+".\OutHex\PreMacro.obj",
+".\OutHex\HybSCH.obj" 
+TO ".\OutHex\Demo" 
+PRINT(".\Listings\Demo.m51") RAMSIZE(256) 

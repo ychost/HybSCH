@@ -1,0 +1,80 @@
+C51 COMPILER V9.54   MAIN                                                                  08/23/2016 18:57:38 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\OutHex\Main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Sources\Main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\Main.lst) TABS(2) OBJECT(.\OutHex\Main.obj)
+
+line level    source
+
+   1          #include "./Headers/PreMacro.h"
+   2          #include "./Headers/HybSCH.h"
+   3          
+   4          //记得去定义SCH_MAX_TASKS 在HybSCH.h文件中
+   5          
+   6          //用于IO口的互锁
+   7          #define LOCKED (bit)1
+   8          #define UNLOCKED (bit)0
+   9          #define LED_PORT P1
+  10          
+  11          sbit LED = P1 ^ 0;
+  12          static bit led_lock = UNLOCKED;
+  13          
+  14          void led_short_flash(void){
+  15   1        if(led_lock == LOCKED){
+  16   2          return;
+  17   2        }
+  18   1        led_lock = LOCKED;
+  19   1        LED = ~LED;
+  20   1        led_lock = UNLOCKED;
+  21   1      }
+  22          
+  23          void led_long_flash(void){
+  24   1        static u8 i = 0;
+  25   1        if(led_lock==LOCKED){
+  26   2          return;
+  27   2        }
+  28   1        led_lock = LOCKED;
+  29   1        for(i=0;i<3;++i){
+  30   2      
+  31   2          LED_PORT = 0xf0;
+  32   2          hard_delay_ms(500);
+  33   2          LED_PORT = 0x0f;
+  34   2          hard_delay_ms(500);
+  35   2        }
+  36   1        led_lock = UNLOCKED;
+  37   1      }
+  38          
+  39          void main(void)
+  40          {
+  41   1          hsch_init_timmer2();
+  42   1        
+  43   1        //led_short_flash 以抢占方式运行，周期为1s
+  44   1        hsch_add_task(led_short_flash,0,1000,0);
+  45   1      
+  46   1        //led_long_flash 以合作方式运行，周期为20s
+  47   1          hsch_add_task(led_long_flash, 0, 20000, 1);
+  48   1      
+  49   1          hsch_start();
+  50   1          while(true)
+  51   1          {
+  52   2              hsch_dispatch_tasks();
+  53   2          }
+  54   1      }
+C51 COMPILER V9.54   MAIN                                                                  08/23/2016 18:57:38 PAGE 2   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     94    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
