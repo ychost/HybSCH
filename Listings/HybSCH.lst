@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   HYBSCH                                                                08/23/2016 18:57:39 PAGE 1   
+C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE HYBSCH
@@ -62,7 +62,7 @@ line level    source
   52   3                  {
   53   4                      hsch_delete_task(i);
   54   4                  }
-C51 COMPILER V9.54   HYBSCH                                                                08/23/2016 18:57:39 PAGE 2   
+C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 2   
 
   55   3              }
   56   2          }
@@ -126,7 +126,7 @@ line level    source
  114          
  115          /**
  116           * 更新调度器，周期由T2设置
-C51 COMPILER V9.54   HYBSCH                                                                08/23/2016 18:57:39 PAGE 3   
+C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 3   
 
  117           */
  118          void hsch_update(void) interrupt TIMMER2_ITRP
@@ -190,7 +190,7 @@ line level    source
  176   1          TH2 = 0xfc;
  177   1          RCAP2H = 0xfc;
  178   1          TL2 = 0x18;
-C51 COMPILER V9.54   HYBSCH                                                                08/23/2016 18:57:39 PAGE 4   
+C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 4   
 
  179   1          RCAP2L = 0x18;
  180   1          ET2 = 1;
@@ -254,7 +254,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =     20       9
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----       1
-C51 COMPILER V9.54   HYBSCH                                                                08/23/2016 18:57:39 PAGE 5   
+C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 5   
 
 END OF MODULE INFORMATION.
 
