@@ -1,7 +1,7 @@
-C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 1   
+C51 COMPILER V9.59.0.0   HYBSCH                                                            05/29/2021 11:58:30 PAGE 1   
 
 
-C51 COMPILER V9.54, COMPILATION OF MODULE HYBSCH
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE HYBSCH
 OBJECT MODULE PLACED IN .\OutHex\HybSCH.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Sources\HybSCH.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
                     -tings\HybSCH.lst) TABS(2) OBJECT(.\OutHex\HybSCH.obj)
@@ -36,226 +36,219 @@ line level    source
   26              u8 co_cp;
   27          } hsTask;
   28          
-  29          
-  30          //任务集合
-  31          hsTask hsch_tasks[SCH_MAX_TASKS];
-  32          
-  33          /**
-  34           * 使单片机进入休眠
-  35           */
-  36          void hsch_to_sleep(void);
-  37          
-  38          /**
-  39           * 扫描任务集合并执行
-  40           */
-  41          void hsch_dispatch_tasks(void)
-  42          {
-  43   1          u8 i = 0;
-  44   1          for(i = 0; i < SCH_MAX_TASKS; ++i)
-  45   1          {
-  46   2              if(hsch_tasks[i].runme > 0 && hsch_tasks[i].co_cp)
-  47   2              {
-  48   3                  hsch_tasks[i].func();
-  49   3                  --hsch_tasks[i].runme;
-  50   3                  
-  51   3                  if(hsch_tasks[i].period == 0)
-  52   3                  {
-  53   4                      hsch_delete_task(i);
-  54   4                  }
-C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 2   
+  29          //任务集合
+  30          hsTask hsch_tasks[SCH_MAX_TASKS];
+  31          
+  32          /**
+  33           * 使单片机进入休眠
+  34           */
+  35          void hsch_to_sleep(void);
+  36          
+  37          /**
+  38           * 扫描任务集合并执行
+  39           */
+  40          void hsch_dispatch_tasks(void)
+  41          {
+  42   1          u8 i = 0;
+  43   1          for (i = 0; i < SCH_MAX_TASKS; ++i)
+  44   1          {
+  45   2              if (hsch_tasks[i].runme > 0 && hsch_tasks[i].co_cp)
+  46   2              {
+  47   3                  hsch_tasks[i].func();
+  48   3                  --hsch_tasks[i].runme;
+  49   3      
+  50   3                  if (hsch_tasks[i].period == 0)
+  51   3                  {
+  52   4                      hsch_delete_task(i);
+  53   4                  }
+  54   3              }
+C51 COMPILER V9.59.0.0   HYBSCH                                                            05/29/2021 11:58:30 PAGE 2   
 
-  55   3              }
-  56   2          }
-  57   1          hsch_report_status();
-  58   1          hsch_to_sleep();
-  59   1      }
-  60          
-  61          /**
-  62           * 添加任务
-  63           * @param  func   任务函数
-  64           * @param  delay  首次执行延时
-  65           * @param  period 周期执行间隔
-  66           * @param  co_cp  合作/抢占标志
-  67           * @return        任务ID [用于删除任务]
-  68           */
-  69          u8 hsch_add_task(Action func,  u16 delay,  u16 period,  u8 co_cp)
-  70          {
-  71   1          u8 i = 0;
-  72   1          while((hsch_tasks[i].func != NULL) && (i < SCH_MAX_TASKS))
-  73   1          {
-  74   2              ++i;
-  75   2          }
-  76   1          if(i == SCH_MAX_TASKS)
-  77   1          {
-  78   2              hsch_error_code = ERROR_SCH_TOO_MANY_TASKS;
-  79   2              return SCH_MAX_TASKS;
-  80   2          }
-  81   1          hsch_tasks[i].func = func;
-  82   1          hsch_tasks[i].delay = delay;
-  83   1          hsch_tasks[i].period = period;
-  84   1          hsch_tasks[i].co_cp = co_cp;
-  85   1          hsch_tasks[i].runme = 0;
-  86   1          
-  87   1          return i;
-  88   1      }
-  89          
-  90          /**
-  91           * 删除任务
-  92           * @param  i 任务ID
-  93           * @return   删除状态
-  94           */
-  95          bool hsch_delete_task(u8 i)
-  96          {
-  97   1          bool ret_code;
-  98   1          if(hsch_tasks[i].func == NULL)
-  99   1          {
- 100   2              hsch_error_code = ERROR_SCH_CANNOT_DELETE_TASK;
- 101   2              ret_code = RETURN_ERROR;
- 102   2          }
- 103   1          else
- 104   1          {
- 105   2              ret_code = RETURN_NORMAL;
- 106   2          }
- 107   1          hsch_tasks[i].func = NULL;
- 108   1          hsch_tasks[i].delay = 0;
- 109   1          hsch_tasks[i].period = 0;
- 110   1          hsch_tasks[i].runme = 0;
- 111   1          
- 112   1          return ret_code;
- 113   1      }
- 114          
- 115          /**
- 116           * 更新调度器，周期由T2设置
-C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 3   
+  55   2          }
+  56   1          hsch_report_status();
+  57   1          hsch_to_sleep();
+  58   1      }
+  59          
+  60          /**
+  61           * 添加任务
+  62           * @param  func   任务函数
+  63           * @param  delay  首次执行延时
+  64           * @param  period 周期执行间隔
+  65           * @param  co_cp  合作/抢占标志
+  66           * @return        任务ID [用于删除任务]
+  67           */
+  68          u8 hsch_add_task(Action func, u16 delay, u16 period, u8 co_cp)
+  69          {
+  70   1          u8 i = 0;
+  71   1          while ((hsch_tasks[i].func != NULL) && (i < SCH_MAX_TASKS))
+  72   1          {
+  73   2              ++i;
+  74   2          }
+  75   1          if (i == SCH_MAX_TASKS)
+  76   1          {
+  77   2              hsch_error_code = ERROR_SCH_TOO_MANY_TASKS;
+  78   2              return SCH_MAX_TASKS;
+  79   2          }
+  80   1          hsch_tasks[i].func = func;
+  81   1          hsch_tasks[i].delay = delay;
+  82   1          hsch_tasks[i].period = period;
+  83   1          hsch_tasks[i].co_cp = co_cp;
+  84   1          hsch_tasks[i].runme = 0;
+  85   1      
+  86   1          return i;
+  87   1      }
+  88          
+  89          /**
+  90           * 删除任务
+  91           * @param  i 任务ID
+  92           * @return   删除状态
+  93           */
+  94          bool hsch_delete_task(u8 i)
+  95          {
+  96   1          bool ret_code;
+  97   1          if (hsch_tasks[i].func == NULL)
+  98   1          {
+  99   2              hsch_error_code = ERROR_SCH_CANNOT_DELETE_TASK;
+ 100   2              ret_code = RETURN_ERROR;
+ 101   2          }
+ 102   1          else
+ 103   1          {
+ 104   2              ret_code = RETURN_NORMAL;
+ 105   2          }
+ 106   1          hsch_tasks[i].func = NULL;
+ 107   1          hsch_tasks[i].delay = 0;
+ 108   1          hsch_tasks[i].period = 0;
+ 109   1          hsch_tasks[i].runme = 0;
+ 110   1      
+ 111   1          return ret_code;
+ 112   1      }
+ 113          
+ 114          /**
+ 115           * 更新调度器，周期由T2设置
+ 116           */
+C51 COMPILER V9.59.0.0   HYBSCH                                                            05/29/2021 11:58:30 PAGE 3   
 
- 117           */
- 118          void hsch_update(void) interrupt TIMMER2_ITRP
- 119          {
- 120   1          u8 i = 0;
- 121   1          TF2 = 0;
- 122   1          for(i = 0; i < SCH_MAX_TASKS; ++i)
- 123   1          {
- 124   2              if(hsch_tasks[i].func )
- 125   2              {
- 126   3                  if(hsch_tasks[i].delay == 0)
- 127   3                  {
- 128   4                      //若是合作式则在中断中只置位,等待到hsch_dispatch_tasks中去执行
- 129   4                      if(hsch_tasks[i].co_cp)
- 130   4                      {
- 131   5                          ++hsch_tasks[i].runme;
- 132   5                      }
- 133   4                      //若是抢占方则在中断中执行该函数
- 134   4                      else
- 135   4                      {
- 136   5                          hsch_tasks[i].func();
- 137   5                          hsch_tasks[i].runme -= 1;
- 138   5                          if(hsch_tasks[i].period == 0)
- 139   5                          {
- 140   6                              hsch_tasks[i].func = NULL;
- 141   6                          }
- 142   5                      }
- 143   4                      //如果是周期执行则将周期间隔赋予下次执行的延时
- 144   4                      if(hsch_tasks[i].period)
- 145   4                      {
- 146   5                          hsch_tasks[i].delay = hsch_tasks[i].period;
- 147   5      
- 148   5                      }
- 149   4      
- 150   4                  }
- 151   3                 //延时计算
- 152   3                  else
- 153   3                  {
- 154   4                      --hsch_tasks[i].delay;
- 155   4                  }
- 156   3              }
- 157   2      
- 158   2          }
- 159   1      }
- 160          
- 161          /**
- 162           * 用Timmer2作为调度器的时钟源,默认1ms为周期
- 163           */
- 164          void hsch_init_timmer2 (void)
- 165          {
- 166   1          u8 i = 0;
- 167   1          for(i = 0; i < SCH_MAX_TASKS; ++i)
- 168   1          {
- 169   2              hsch_delete_task(i);
- 170   2          }
- 171   1          hsch_error_code = 0;
- 172   1      
- 173   1      
- 174   1          T2CON = 0x04;
- 175   1          T2MOD = 0x00;
- 176   1          TH2 = 0xfc;
- 177   1          RCAP2H = 0xfc;
- 178   1          TL2 = 0x18;
-C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 4   
+ 117          void hsch_update(void) interrupt TIMMER2_ITRP
+ 118          {
+ 119   1          u8 i = 0;
+ 120   1          TF2 = 0;
+ 121   1          for (i = 0; i < SCH_MAX_TASKS; ++i)
+ 122   1          {
+ 123   2              if (hsch_tasks[i].func)
+ 124   2              {
+ 125   3                  if (hsch_tasks[i].delay == 0)
+ 126   3                  {
+ 127   4                      //若是合作式则在中断中只置位,等待到hsch_dispatch_tasks中去执行
+ 128   4                      if (hsch_tasks[i].co_cp)
+ 129   4                      {
+ 130   5                          ++hsch_tasks[i].runme;
+ 131   5                      }
+ 132   4                      //若是抢占方则在中断中执行该函数
+ 133   4                      else
+ 134   4                      {
+ 135   5                          hsch_tasks[i].func();
+ 136   5                          hsch_tasks[i].runme -= 1;
+ 137   5                          if (hsch_tasks[i].period == 0)
+ 138   5                          {
+ 139   6                              hsch_tasks[i].func = NULL;
+ 140   6                          }
+ 141   5                      }
+ 142   4                      //如果是周期执行则将周期间隔赋予下次执行的延时
+ 143   4                      if (hsch_tasks[i].period)
+ 144   4                      {
+ 145   5                          hsch_tasks[i].delay = hsch_tasks[i].period;
+ 146   5                      }
+ 147   4                  }
+ 148   3                  //延时计算
+ 149   3                  else
+ 150   3                  {
+ 151   4                      --hsch_tasks[i].delay;
+ 152   4                  }
+ 153   3              }
+ 154   2          }
+ 155   1      }
+ 156          
+ 157          /**
+ 158           * 用Timmer2作为调度器的时钟源,默认1ms为周期
+ 159           */
+ 160          void hsch_init_timmer2(void)
+ 161          {
+ 162   1          u8 i = 0;
+ 163   1          for (i = 0; i < SCH_MAX_TASKS; ++i)
+ 164   1          {
+ 165   2              hsch_delete_task(i);
+ 166   2          }
+ 167   1          hsch_error_code = 0;
+ 168   1      
+ 169   1          T2CON = 0x04;
+ 170   1          T2MOD = 0x00;
+ 171   1          TH2 = 0xfc;
+ 172   1          RCAP2H = 0xfc;
+ 173   1          TL2 = 0x18;
+ 174   1          RCAP2L = 0x18;
+ 175   1          ET2 = 1;
+ 176   1          TR2 = 1;
+ 177   1      }
+ 178          
+C51 COMPILER V9.59.0.0   HYBSCH                                                            05/29/2021 11:58:30 PAGE 4   
 
- 179   1          RCAP2L = 0x18;
- 180   1          ET2 = 1;
- 181   1          TR2 = 1;
- 182   1      }
- 183          
- 184          /**
- 185           * 单片机开启休眠
- 186           */
- 187          void hsch_to_sleep(void)
- 188          {
- 189   1          PCON |= 0x01;
- 190   1      }
- 191          
- 192          /**
- 193           * 启动调度器
- 194           */
- 195          void hsch_start(void)
- 196          {
- 197   1          EA = 1;
- 198   1      }
- 199          
- 200          /**
- 201           * 输出调度器状态
- 202           */
- 203          void hsch_report_status(void)
- 204          {
- 205   1      #ifdef SCH_REPORT_STATUS
- 206   1          if(hsch_error_code != last_error_code)
- 207   1          {
- 208   2              ERROR_PORT = 0xff - hsch_error_code;
- 209   2              last_error_code = hsch_error_code;
- 210   2              if(hsch_error_code  != 0)
- 211   2              {
- 212   3                  error_tick_count = 6000;
- 213   3              }
- 214   2              else
- 215   2              {
- 216   3                  error_tick_count = 0;
- 217   3              }
- 218   2          }
- 219   1          else
- 220   1          {
- 221   2              if(error_tick_count != 0)
- 222   2              {
- 223   3                  if(--error_tick_count == 0)
- 224   3                  {
- 225   4                      hsch_error_code = 0;
- 226   4                  }
- 227   3              }
- 228   2          }
- 229   1      #endif
- 230   1      }
+ 179          /**
+ 180           * 单片机开启休眠
+ 181           */
+ 182          void hsch_to_sleep(void)
+ 183          {
+ 184   1          PCON |= 0x01;
+ 185   1      }
+ 186          
+ 187          /**
+ 188           * 启动调度器
+ 189           */
+ 190          void hsch_start(void)
+ 191          {
+ 192   1          EA = 1;
+ 193   1      }
+ 194          
+ 195          /**
+ 196           * 输出调度器状态
+ 197           */
+ 198          void hsch_report_status(void)
+ 199          {
+ 200   1      #ifdef SCH_REPORT_STATUS
+ 201   1          if (hsch_error_code != last_error_code)
+ 202   1          {
+ 203   2              ERROR_PORT = 0xff - hsch_error_code;
+ 204   2              last_error_code = hsch_error_code;
+ 205   2              if (hsch_error_code != 0)
+ 206   2              {
+ 207   3                  error_tick_count = 6000;
+ 208   3              }
+ 209   2              else
+ 210   2              {
+ 211   3                  error_tick_count = 0;
+ 212   3              }
+ 213   2          }
+ 214   1          else
+ 215   1          {
+ 216   2              if (error_tick_count != 0)
+ 217   2              {
+ 218   3                  if (--error_tick_count == 0)
+ 219   3                  {
+ 220   4                      hsch_error_code = 0;
+ 221   4                  }
+ 222   3              }
+ 223   2          }
+ 224   1      #endif
+ 225   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    612    ----
+   CODE SIZE        =    644    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     20       9
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----       1
-C51 COMPILER V9.54   HYBSCH                                                                08/28/2016 21:23:41 PAGE 5   
-
 END OF MODULE INFORMATION.
 
 

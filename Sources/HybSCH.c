@@ -26,7 +26,6 @@ typedef data struct
     u8 co_cp;
 } hsTask;
 
-
 //任务集合
 hsTask hsch_tasks[SCH_MAX_TASKS];
 
@@ -41,14 +40,14 @@ void hsch_to_sleep(void);
 void hsch_dispatch_tasks(void)
 {
     u8 i = 0;
-    for(i = 0; i < SCH_MAX_TASKS; ++i)
+    for (i = 0; i < SCH_MAX_TASKS; ++i)
     {
-        if(hsch_tasks[i].runme > 0 && hsch_tasks[i].co_cp)
+        if (hsch_tasks[i].runme > 0 && hsch_tasks[i].co_cp)
         {
             hsch_tasks[i].func();
             --hsch_tasks[i].runme;
-						
-            if(hsch_tasks[i].period == 0)
+
+            if (hsch_tasks[i].period == 0)
             {
                 hsch_delete_task(i);
             }
@@ -66,14 +65,14 @@ void hsch_dispatch_tasks(void)
  * @param  co_cp  合作/抢占标志
  * @return        任务ID [用于删除任务]
  */
-u8 hsch_add_task(Action func,  u16 delay,  u16 period,  u8 co_cp)
+u8 hsch_add_task(Action func, u16 delay, u16 period, u8 co_cp)
 {
     u8 i = 0;
-    while((hsch_tasks[i].func != NULL) && (i < SCH_MAX_TASKS))
+    while ((hsch_tasks[i].func != NULL) && (i < SCH_MAX_TASKS))
     {
         ++i;
     }
-    if(i == SCH_MAX_TASKS)
+    if (i == SCH_MAX_TASKS)
     {
         hsch_error_code = ERROR_SCH_TOO_MANY_TASKS;
         return SCH_MAX_TASKS;
@@ -82,8 +81,8 @@ u8 hsch_add_task(Action func,  u16 delay,  u16 period,  u8 co_cp)
     hsch_tasks[i].delay = delay;
     hsch_tasks[i].period = period;
     hsch_tasks[i].co_cp = co_cp;
-		hsch_tasks[i].runme = 0;
-		
+    hsch_tasks[i].runme = 0;
+
     return i;
 }
 
@@ -95,7 +94,7 @@ u8 hsch_add_task(Action func,  u16 delay,  u16 period,  u8 co_cp)
 bool hsch_delete_task(u8 i)
 {
     bool ret_code;
-    if(hsch_tasks[i].func == NULL)
+    if (hsch_tasks[i].func == NULL)
     {
         hsch_error_code = ERROR_SCH_CANNOT_DELETE_TASK;
         ret_code = RETURN_ERROR;
@@ -107,8 +106,8 @@ bool hsch_delete_task(u8 i)
     hsch_tasks[i].func = NULL;
     hsch_tasks[i].delay = 0;
     hsch_tasks[i].period = 0;
-		hsch_tasks[i].runme = 0;
-		
+    hsch_tasks[i].runme = 0;
+
     return ret_code;
 }
 
@@ -119,57 +118,53 @@ void hsch_update(void) interrupt TIMMER2_ITRP
 {
     u8 i = 0;
     TF2 = 0;
-    for(i = 0; i < SCH_MAX_TASKS; ++i)
+    for (i = 0; i < SCH_MAX_TASKS; ++i)
     {
-        if(hsch_tasks[i].func )
+        if (hsch_tasks[i].func)
         {
-            if(hsch_tasks[i].delay == 0)
+            if (hsch_tasks[i].delay == 0)
             {
-								//若是合作式则在中断中只置位,等待到hsch_dispatch_tasks中去执行
-                if(hsch_tasks[i].co_cp)
+                //若是合作式则在中断中只置位,等待到hsch_dispatch_tasks中去执行
+                if (hsch_tasks[i].co_cp)
                 {
                     ++hsch_tasks[i].runme;
                 }
-								//若是抢占方则在中断中执行该函数
+                //若是抢占方则在中断中执行该函数
                 else
                 {
                     hsch_tasks[i].func();
                     hsch_tasks[i].runme -= 1;
-                    if(hsch_tasks[i].period == 0)
+                    if (hsch_tasks[i].period == 0)
                     {
                         hsch_tasks[i].func = NULL;
                     }
                 }
-								//如果是周期执行则将周期间隔赋予下次执行的延时
-                if(hsch_tasks[i].period)
+                //如果是周期执行则将周期间隔赋予下次执行的延时
+                if (hsch_tasks[i].period)
                 {
                     hsch_tasks[i].delay = hsch_tasks[i].period;
-
                 }
-
             }
-					 //延时计算
+            //延时计算
             else
             {
                 --hsch_tasks[i].delay;
             }
         }
-
     }
 }
 
 /**
  * 用Timmer2作为调度器的时钟源,默认1ms为周期
  */
-void hsch_init_timmer2 (void)
+void hsch_init_timmer2(void)
 {
     u8 i = 0;
-    for(i = 0; i < SCH_MAX_TASKS; ++i)
+    for (i = 0; i < SCH_MAX_TASKS; ++i)
     {
         hsch_delete_task(i);
     }
     hsch_error_code = 0;
-
 
     T2CON = 0x04;
     T2MOD = 0x00;
@@ -203,11 +198,11 @@ void hsch_start(void)
 void hsch_report_status(void)
 {
 #ifdef SCH_REPORT_STATUS
-    if(hsch_error_code != last_error_code)
+    if (hsch_error_code != last_error_code)
     {
         ERROR_PORT = 0xff - hsch_error_code;
         last_error_code = hsch_error_code;
-        if(hsch_error_code  != 0)
+        if (hsch_error_code != 0)
         {
             error_tick_count = 6000;
         }
@@ -218,9 +213,9 @@ void hsch_report_status(void)
     }
     else
     {
-        if(error_tick_count != 0)
+        if (error_tick_count != 0)
         {
-            if(--error_tick_count == 0)
+            if (--error_tick_count == 0)
             {
                 hsch_error_code = 0;
             }

@@ -1,0 +1,9 @@
+{
+    "cSpell.words": [
+        "sbit"
+    ],
+    "files.associations": {
+        "premacro.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}

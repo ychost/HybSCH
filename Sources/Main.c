@@ -1,54 +1,31 @@
 #include "./Headers/PreMacro.h"
 #include "./Headers/HybSCH.h"
 
-//记得去定义SCH_MAX_TASKS 在HybSCH.h文件中
+// P_10 --> P_17 依次点亮
+#define UP 0
+// P_17 --> P_10 依次点亮
+#define DOWN !UP
 
-//用于IO口的互锁
-#define LOCKED (bit)1
-#define UNLOCKED (bit)0
-#define LED_PORT P1
-
-sbit LED = P1 ^ 0;
-static bit led_lock = UNLOCKED;
-
-void led_short_flash(void){
-	if(led_lock == LOCKED){
-		return;
-	}
-	led_lock = LOCKED;
-	LED = ~LED;
-	led_lock = UNLOCKED;
-}
-
-void led_long_flash(void){
-	static u8 i = 0;
-	if(led_lock==LOCKED){
-		return;
-	}
-	led_lock = LOCKED;
-	for(i=0;i<3;++i){
-
-		LED_PORT = 0xf0;
-		hard_delay_ms(500);
-		LED_PORT = 0x0f;
-		hard_delay_ms(500);
-	}
-	led_lock = UNLOCKED;
+void led_flow(void)
+{
+	static direct = UP;
+	// 上下流水，注意初始化 0xFF 和 0x8F 的位移操作
+	P1 = (direct == UP) ? (P1 << 1 | (P1 == 0xFF ? 0x00 : 0x01)) : (P1 >> 1 | (P1 == 0x8F ? 0x00 : 0x80));
+	// 流水灯掉头
+	direct = ((P1 == 0x7F && direct == UP) || (P1 == 0xFE && direct == DOWN)) ? !direct : direct;
 }
 
 void main(void)
 {
-    hsch_init_timmer2();
-	
-	//led_short_flash 以抢占方式运行，周期为1s
-	hsch_add_task(led_short_flash,0,1000,0);
-
-	//led_long_flash 以合作方式运行，周期为20s
-    hsch_add_task(led_long_flash, 0, 20000, 1);
-
-    hsch_start();
-    while(true)
-    {
-        hsch_dispatch_tasks();
-    }
+	// 初始化调度器
+	hsch_init_timmer2();
+	// 追加任务，流水灯
+	hsch_add_task(led_flow, 0, 1000, SCH_COO_TYPE);
+	// 启动调度器
+	hsch_start();
+	while (true)
+	{
+		// 派遣任务
+		hsch_dispatch_tasks();
+	}
 }

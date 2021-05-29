@@ -1,15 +1,13 @@
 #ifndef __HYBIRD_SCH_H_
 #define __HYBIRD_SCH_H_
 
-
 #define SCH_REPORT_STATUS
 #define ERROR_PORT P2
 
-
 void hsch_dispatch_tasks(void);
-u8   hsch_add_task(Action,  u16,  u16,  u8);
-bool  hsch_delete_task(const u8);
-void hsch_init_timmer2 (void);
+u8 hsch_add_task(Action, u16, u16, u8);
+bool hsch_delete_task(const u8);
+void hsch_init_timmer2(void);
 void hsch_start(void);
 void hsch_report_status(void);
 
