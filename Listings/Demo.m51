@@ -1,9 +1,9 @@
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/29/2021  11:58:30  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/30/2021  22:35:44  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\OutHex\STARTUP.obj, .\OutHex\Main.obj, .\OutHex\PreMacro.obj, .\OutHex\HybSCH.obj TO .\Out
->> Hex\Demo PRINT (.\Listings\Demo.m51) RAMSIZE (256)
+C:\KEIL_V5\C51\BIN\BL51.EXE .\OutHex\STARTUP.obj, .\OutHex\Main.obj, .\OutHex\PreMacro.obj, .\OutHex\HybSCH.obj, .\OutHe
+>> x\Led.obj, .\OutHex\Button.obj, .\OutHex\Bee.obj TO .\OutHex\Demo PRINT (.\Listings\Demo.m51) RAMSIZE (256)
 
 
 MEMORY MODEL: SMALL
@@ -14,8 +14,14 @@ INPUT MODULES INCLUDED:
   .\OutHex\Main.obj (MAIN)
   .\OutHex\PreMacro.obj (PREMACRO)
   .\OutHex\HybSCH.obj (HYBSCH)
+  .\OutHex\Led.obj (LED)
+  .\OutHex\Button.obj (BUTTON)
+  .\OutHex\Bee.obj (BEE)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?IILDX)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ICALL)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_IBP)
 
 
 LINK MAP OF MODULE:  .\OutHex\Demo (?C_STARTUP)
@@ -26,71 +32,115 @@ LINK MAP OF MODULE:  .\OutHex\Demo (?C_STARTUP)
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
-            DATA    0008H     0014H     UNIT         ?DT?HYBSCH
-            DATA    001CH     0002H     UNIT         ?DT?MAIN
-                    001EH     0002H                  *** GAP ***
-            BIT     0020H.0   0000H.1   UNIT         _BIT_GROUP_
-                    0020H.1   0000H.7                *** GAP ***
-            DATA    0021H     0008H     UNIT         _DATA_GROUP_
-            IDATA   0029H     0001H     UNIT         ?STACK
+            DATA    0008H     000BH     UNIT         _DATA_GROUP_
+            DATA    0013H     0006H     UNIT         ?DT?_HSC_ONCE_TASK?HYBSCH
+            DATA    0019H     0004H     UNIT         ?DT?HYBSCH
+            DATA    001DH     0003H     UNIT         ?DT?BUTTON
+            BIT     0020H.0   0000H.2   UNIT         _BIT_GROUP_
+                    0020H.2   0000H.6                *** GAP ***
+            DATA    0021H     0002H     UNIT         ?DT?LED
+            DATA    0023H     0001H     UNIT         ?C?LIB_DATA
+            IDATA   0024H     000FH     UNIT         ?ID?BUTTON
+            IDATA   0033H     0003H     UNIT         _IDATA_GROUP_
+            IDATA   0036H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0024H     UNIT         ?XD?HYBSCH
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-            CODE    0003H     001CH     UNIT         ?PR?MAIN?MAIN
-            CODE    001FH     0006H     UNIT         ?C?LIB_CODE
+            CODE    0003H     0022H     UNIT         ?PR?_GET_BUTTON_VOL?BUTTON
             CODE    0025H     0005H     UNIT         ?C_INITSEG
-                    002AH     0001H                  *** GAP ***
+            CODE    002AH     0001H     UNIT         ?PR?HSCH_REPORT_STATUS?HYBSCH
             CODE    002BH     0003H     ABSOLUTE     
-            CODE    002EH     00FAH     UNIT         ?PR?HSCH_UPDATE?HYBSCH
-            CODE    0128H     008CH     UNIT         ?C_C51STARTUP
-            CODE    01B4H     006EH     UNIT         ?PR?LED_FLOW?MAIN
-            CODE    0222H     006BH     UNIT         ?PR?HSCH_DISPATCH_TASKS?HYBSCH
-            CODE    028DH     006BH     UNIT         ?PR?_HSCH_ADD_TASK?HYBSCH
-            CODE    02F8H     0049H     UNIT         ?PR?_HSCH_DELETE_TASK?HYBSCH
-            CODE    0341H     0037H     UNIT         ?PR?HSCH_REPORT_STATUS?HYBSCH
-            CODE    0378H     002DH     UNIT         ?PR?HSCH_INIT_TIMMER2?HYBSCH
-            CODE    03A5H     0029H     UNIT         ?PR?_HARD_DELAY_MS?PREMACRO
-            CODE    03CEH     001CH     UNIT         ?PR?_SOFT_DELAY_MS?PREMACRO
-            CODE    03EAH     0004H     UNIT         ?PR?HSCH_TO_SLEEP?HYBSCH
-            CODE    03EEH     0003H     UNIT         ?PR?HSCH_START?HYBSCH
+            CODE    002EH     0141H     UNIT         ?PR?HSCH_UPDATE?HYBSCH
+            CODE    016FH     0112H     UNIT         ?C?LIB_CODE
+            CODE    0281H     00D4H     UNIT         ?PR?HSCH_DISPATCH_TASKS?HYBSCH
+            CODE    0355H     00A4H     UNIT         ?PR?_HSCH_ADD_TASK?HYBSCH
+            CODE    03F9H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0485H     0077H     UNIT         ?PR?_HSCH_DELETE_TASK?HYBSCH
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 2
+
+
+            CODE    04FCH     006EH     UNIT         ?PR?LED_FLOW?LED
+            CODE    056AH     0060H     UNIT         ?PR?BTN_POLL_SCAN?BUTTON
+            CODE    05CAH     0047H     UNIT         ?PR?_BTN_UNBIND_EVENT?BUTTON
+            CODE    0611H     0045H     UNIT         ?PR?_BTN_RAISE_EVENT?BUTTON
+            CODE    0656H     003EH     UNIT         ?PR?_BTN_BIND_EVENT?BUTTON
+            CODE    0694H     0035H     UNIT         ?PR?HSCH_INIT_TASKS?MAIN
+            CODE    06C9H     0034H     UNIT         ?PR?_BTN_DISPATCH_EVENT?BUTTON
+            CODE    06FDH     002DH     UNIT         ?PR?HSCH_INIT_TIMMER2?HYBSCH
+            CODE    072AH     0029H     UNIT         ?PR?_HARD_DELAY_MS?PREMACRO
+            CODE    0753H     001CH     UNIT         ?PR?_SOFT_DELAY_MS?PREMACRO
+            CODE    076FH     0017H     UNIT         ?PR?ALARM_SWITCH?MAIN
+            CODE    0786H     0012H     UNIT         ?PR?BTN_INIT_LISTENERS?MAIN
+            CODE    0798H     0011H     UNIT         ?PR?MAIN?MAIN
+            CODE    07A9H     000FH     UNIT         ?PR?_HSC_ONCE_TASK?HYBSCH
+            CODE    07B8H     0004H     UNIT         ?PR?HSCH_TO_SLEEP?HYBSCH
+            CODE    07BCH     0003H     UNIT         ?PR?HSCH_START?HYBSCH
+            CODE    07BFH     0003H     UNIT         ?PR?BEE_ALARM_OPEN?BEE
+            CODE    07C2H     0003H     UNIT         ?PR?BEE_ALARM_CLOSE?BEE
 
 
 
 OVERLAY MAP OF MODULE:   .\OutHex\Demo (?C_STARTUP)
 
 
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 2
-
-
-SEGMENT                                   BIT_GROUP          DATA_GROUP 
-  +--> CALLED SEGMENT                  START    LENGTH     START    LENGTH
---------------------------------------------------------------------------
-?C_C51STARTUP                          -----    -----      -----    -----
+SEGMENT                                   BIT_GROUP          DATA_GROUP          IDATA_GROUP
+  +--> CALLED SEGMENT                  START    LENGTH     START    LENGTH     START    LENGTH
+----------------------------------------------------------------------------------------------
+?C_C51STARTUP                          -----    -----      -----    -----      -----    -----
   +--> ?PR?MAIN?MAIN
   +--> ?C_INITSEG
 
-?PR?MAIN?MAIN                          -----    -----      -----    -----
+?PR?MAIN?MAIN                          -----    -----      -----    -----      -----    -----
   +--> ?PR?HSCH_INIT_TIMMER2?HYBSCH
-  +--> ?PR?LED_FLOW?MAIN
-  +--> ?PR?_HSCH_ADD_TASK?HYBSCH
+  +--> ?PR?HSCH_INIT_TASKS?MAIN
+  +--> ?PR?BTN_INIT_LISTENERS?MAIN
   +--> ?PR?HSCH_START?HYBSCH
   +--> ?PR?HSCH_DISPATCH_TASKS?HYBSCH
 
-?PR?HSCH_INIT_TIMMER2?HYBSCH           -----    -----      -----    -----
+?PR?HSCH_INIT_TIMMER2?HYBSCH           -----    -----      -----    -----      -----    -----
   +--> ?PR?_HSCH_DELETE_TASK?HYBSCH
 
-?PR?_HSCH_DELETE_TASK?HYBSCH           0020H.0  0000H.1    -----    -----
+?PR?_HSCH_DELETE_TASK?HYBSCH           0020H.1  0000H.1    -----    -----      -----    -----
 
-?PR?_HSCH_ADD_TASK?HYBSCH              -----    -----      0021H    0007H
+?PR?HSCH_INIT_TASKS?MAIN               -----    -----      -----    -----      -----    -----
+  +--> ?PR?LED_FLOW?LED
+  +--> ?PR?_HSCH_ADD_TASK?HYBSCH
+  +--> ?PR?BTN_POLL_SCAN?BUTTON
 
-?PR?HSCH_DISPATCH_TASKS?HYBSCH         -----    -----      0021H    0001H
+?PR?_HSCH_ADD_TASK?HYBSCH              -----    -----      0008H    000AH      -----    -----
+
+?PR?BTN_POLL_SCAN?BUTTON               -----    -----      0008H    0001H      -----    -----
+  +--> ?PR?_GET_BUTTON_VOL?BUTTON
+  +--> ?PR?_BTN_RAISE_EVENT?BUTTON
+
+?PR?_BTN_RAISE_EVENT?BUTTON            -----    -----      0009H    0003H      0033H    0003H
+  +--> ?PR?_BTN_DISPATCH_EVENT?BUTTON
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 3
+
+
+?PR?_BTN_DISPATCH_EVENT?BUTTON         -----    -----      000CH    0001H      -----    -----
+
+?PR?BTN_INIT_LISTENERS?MAIN            -----    -----      -----    -----      -----    -----
+  +--> ?PR?ALARM_SWITCH?MAIN
+  +--> ?PR?_BTN_BIND_EVENT?BUTTON
+
+?PR?ALARM_SWITCH?MAIN                  -----    -----      0008H    0003H      -----    -----
+  +--> ?PR?BEE_ALARM_OPEN?BEE
+  +--> ?PR?BEE_ALARM_CLOSE?BEE
+
+?PR?HSCH_DISPATCH_TASKS?HYBSCH         -----    -----      0008H    0001H      -----    -----
   +--> ?PR?_HSCH_DELETE_TASK?HYBSCH
   +--> ?PR?HSCH_REPORT_STATUS?HYBSCH
   +--> ?PR?HSCH_TO_SLEEP?HYBSCH
 
 *** NEW ROOT ***************************************************
 
-?PR?HSCH_UPDATE?HYBSCH                 -----    -----      0028H    0001H
+?PR?HSCH_UPDATE?HYBSCH                 -----    -----      0012H    0001H      -----    -----
+  +--> ?PR?_HSCH_DELETE_TASK?HYBSCH
 
 
 
@@ -100,8 +150,8 @@ SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
-  C:0128H         SEGMENT       ?C_C51STARTUP
-  I:0029H         SEGMENT       ?STACK
+  C:03F9H         SEGMENT       ?C_C51STARTUP
+  I:0036H         SEGMENT       ?STACK
   C:0000H         PUBLIC        ?C_STARTUP
   D:00E0H         SYMBOL        ACC
   D:00F0H         SYMBOL        B
@@ -110,7 +160,7 @@ SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
   N:0000H         SYMBOL        IBPSTACK
   N:0100H         SYMBOL        IBPSTACKTOP
   N:0080H         SYMBOL        IDATALEN
-  C:012BH         SYMBOL        IDATALOOP
+  C:03FCH         SYMBOL        IDATALOOP
   N:0000H         SYMBOL        PBPSTACK
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
@@ -119,48 +169,69 @@ SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
   N:0000H         SYMBOL        PPAGEENABLE
   D:00A0H         SYMBOL        PPAGE_SFR
   D:0081H         SYMBOL        SP
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 3
-
-
-  C:0128H         SYMBOL        STARTUP1
+  C:03F9H         SYMBOL        STARTUP1
   N:0000H         SYMBOL        XBPSTACK
   N:0000H         SYMBOL        XBPSTACKTOP
   N:0000H         SYMBOL        XDATALEN
   N:0000H         SYMBOL        XDATASTART
   C:0000H         LINE#         126
-  C:0128H         LINE#         133
-  C:012AH         LINE#         134
-  C:012BH         LINE#         135
-  C:012CH         LINE#         136
-  C:012EH         LINE#         185
-  C:0131H         LINE#         196
+  C:03F9H         LINE#         133
+  C:03FBH         LINE#         134
+  C:03FCH         LINE#         135
+  C:03FDH         LINE#         136
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 4
+
+
+  C:03FFH         LINE#         185
+  C:0402H         LINE#         196
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        MAIN
   C:0000H         SYMBOL        _ICE_DUMMY_
-  D:0090H         PUBLIC        P1
-  C:0003H         PUBLIC        main
-  C:01B4H         PUBLIC        led_flow
-  -------         PROC          LED_FLOW
-  -------         DO            
-  D:001CH         SYMBOL        direct
-  -------         ENDDO         
-  C:01B4H         LINE#         9
-  C:01B4H         LINE#         10
-  C:01B4H         LINE#         13
-  C:01EDH         LINE#         15
-  C:0221H         LINE#         16
-  -------         ENDPROC       LED_FLOW
+  C:076FH         PUBLIC        alarm_switch
+  C:0786H         PUBLIC        btn_init_listeners
+  C:0798H         PUBLIC        main
+  C:0694H         PUBLIC        hsch_init_tasks
+  -------         PROC          HSCH_INIT_TASKS
+  C:0694H         LINE#         10
+  C:0694H         LINE#         11
+  C:0694H         LINE#         13
+  C:06AFH         LINE#         15
+  -------         ENDPROC       HSCH_INIT_TASKS
+  -------         PROC          ALARM_SWITCH
+  D:0008H         SYMBOL        event
+  C:076FH         LINE#         22
+  C:076FH         LINE#         23
+  C:076FH         LINE#         24
+  C:0773H         LINE#         25
+  C:0773H         LINE#         27
+  C:0773H         LINE#         28
+  C:0779H         LINE#         29
+  C:0779H         LINE#         30
+  C:077CH         LINE#         31
+  C:077CH         LINE#         32
+  C:0782H         LINE#         33
+  C:0782H         LINE#         34
+  C:0785H         LINE#         35
+  C:0785H         LINE#         36
+  -------         ENDPROC       ALARM_SWITCH
+  -------         PROC          BTN_INIT_LISTENERS
+  C:0786H         LINE#         41
+  C:0786H         LINE#         42
+  C:0786H         LINE#         43
+  C:078FH         LINE#         44
+  -------         ENDPROC       BTN_INIT_LISTENERS
   -------         PROC          MAIN
-  C:0003H         LINE#         18
-  C:0003H         LINE#         19
-  C:0003H         LINE#         21
-  C:0006H         LINE#         23
-  C:0017H         LINE#         25
-  C:001AH         LINE#         26
-  C:001AH         LINE#         27
-  C:001AH         LINE#         29
-  C:001DH         LINE#         30
+  C:0798H         LINE#         47
+  C:0798H         LINE#         48
+  C:0798H         LINE#         50
+  C:079BH         LINE#         52
+  C:079EH         LINE#         54
+  C:07A1H         LINE#         56
+  C:07A4H         LINE#         57
+  C:07A4H         LINE#         58
+  C:07A4H         LINE#         60
+  C:07A7H         LINE#         61
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
@@ -168,35 +239,35 @@ SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0089H         PUBLIC        TMOD
   B:00A8H.1       PUBLIC        ET0
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 5
+
+
   B:0088H.5       PUBLIC        TF0
   D:008CH         PUBLIC        TH0
   D:008AH         PUBLIC        TL0
-  C:03A5H         PUBLIC        _hard_delay_ms
+  C:072AH         PUBLIC        _hard_delay_ms
   B:0088H.4       PUBLIC        TR0
-  C:03CEH         PUBLIC        _soft_delay_ms
+  C:0753H         PUBLIC        _soft_delay_ms
   -------         PROC          _HARD_DELAY_MS
   D:0006H         SYMBOL        t
   -------         DO            
   D:0004H         SYMBOL        ms
   -------         ENDDO         
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 4
-
-
-  C:03A5H         LINE#         24
-  C:03A5H         LINE#         25
-  C:03A5H         LINE#         27
-  C:03A8H         LINE#         28
-  C:03ABH         LINE#         29
-  C:03ADH         LINE#         30
-  C:03B7H         LINE#         31
-  C:03B7H         LINE#         32
-  C:03BAH         LINE#         33
-  C:03BDH         LINE#         34
-  C:03BFH         LINE#         35
-  C:03C1H         LINE#         36
-  C:03C4H         LINE#         38
-  C:03C6H         LINE#         39
-  C:03CDH         LINE#         40
+  C:072AH         LINE#         24
+  C:072AH         LINE#         25
+  C:072AH         LINE#         27
+  C:072DH         LINE#         28
+  C:0730H         LINE#         29
+  C:0732H         LINE#         30
+  C:073CH         LINE#         31
+  C:073CH         LINE#         32
+  C:073FH         LINE#         33
+  C:0742H         LINE#         34
+  C:0744H         LINE#         35
+  C:0746H         LINE#         36
+  C:0749H         LINE#         38
+  C:074BH         LINE#         39
+  C:0752H         LINE#         40
   -------         ENDPROC       _HARD_DELAY_MS
   -------         PROC          _SOFT_DELAY_MS
   D:0006H         SYMBOL        t
@@ -204,229 +275,411 @@ SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
   D:0005H         SYMBOL        x
   D:0004H         SYMBOL        y
   -------         ENDDO         
-  C:03CEH         LINE#         46
-  C:03CEH         LINE#         47
-  C:03CEH         LINE#         49
-  C:03D7H         LINE#         50
-  C:03D7H         LINE#         51
-  C:03E6H         LINE#         53
-  C:03E9H         LINE#         54
+  C:0753H         LINE#         46
+  C:0753H         LINE#         47
+  C:0753H         LINE#         49
+  C:075CH         LINE#         50
+  C:075CH         LINE#         51
+  C:076BH         LINE#         53
+  C:076EH         LINE#         54
   -------         ENDPROC       _SOFT_DELAY_MS
   -------         ENDMOD        PREMACRO
 
   -------         MODULE        HYBSCH
   C:0000H         SYMBOL        _ICE_DUMMY_
-  D:00A0H         PUBLIC        P2
   B:00A8H.7       PUBLIC        EA
   C:002EH         PUBLIC        hsch_update
-  C:02F8H         PUBLIC        _hsch_delete_task
+  C:0485H         PUBLIC        _hsch_delete_task
   D:00CBH         PUBLIC        RCAP2H
   D:00CAH         PUBLIC        RCAP2L
   D:0087H         PUBLIC        PCON
-  D:0008H         PUBLIC        hsch_tasks
-  C:0341H         PUBLIC        hsch_report_status
-  D:0018H         SYMBOL        hsch_error_code
-  C:03EEH         PUBLIC        hsch_start
-  D:0019H         SYMBOL        last_error_code
-  D:001AH         SYMBOL        error_tick_count
-  C:028DH         PUBLIC        _hsch_add_task
+  X:0000H         PUBLIC        hsch_tasks
+  C:002AH         PUBLIC        hsch_report_status
+  D:0019H         SYMBOL        hsch_error_code
+  C:07BCH         PUBLIC        hsch_start
+  D:001AH         SYMBOL        last_error_code
+  D:001BH         SYMBOL        error_tick_count
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 6
+
+
+  C:0355H         PUBLIC        _hsch_add_task
   B:00A8H.5       PUBLIC        ET2
   B:00C8H.7       PUBLIC        TF2
   D:00CDH         PUBLIC        TH2
   D:00CCH         PUBLIC        TL2
   B:00C8H.2       PUBLIC        TR2
-  C:0378H         PUBLIC        hsch_init_timmer2
+  C:07A9H         PUBLIC        _hsc_once_task
+  C:06FDH         PUBLIC        hsch_init_timmer2
   D:00C9H         PUBLIC        T2MOD
   D:00C8H         PUBLIC        T2CON
-  C:0222H         PUBLIC        hsch_dispatch_tasks
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 5
-
-
-  C:03EAH         PUBLIC        hsch_to_sleep
+  C:0281H         PUBLIC        hsch_dispatch_tasks
+  C:07B8H         PUBLIC        hsch_to_sleep
   -------         PROC          HSCH_DISPATCH_TASKS
   -------         DO            
-  D:0021H         SYMBOL        i
+  D:0008H         SYMBOL        i
   -------         ENDDO         
-  C:0222H         LINE#         40
-  C:0222H         LINE#         41
-  C:0222H         LINE#         42
-  C:0225H         LINE#         43
-  C:0232H         LINE#         44
-  C:0232H         LINE#         45
-  C:0251H         LINE#         46
-  C:0251H         LINE#         47
-  C:0264H         LINE#         48
-  C:026EH         LINE#         50
-  C:027EH         LINE#         51
-  C:027EH         LINE#         52
-  C:0283H         LINE#         53
-  C:0283H         LINE#         54
-  C:0283H         LINE#         55
-  C:0287H         LINE#         56
-  C:028AH         LINE#         57
+  C:0281H         LINE#         41
+  C:0281H         LINE#         42
+  C:0281H         LINE#         43
+  C:0284H         LINE#         44
+  C:0294H         LINE#         45
+  C:0294H         LINE#         46
+  C:02DBH         LINE#         47
+  C:02DBH         LINE#         48
+  C:030BH         LINE#         49
+  C:031DH         LINE#         52
+  C:0345H         LINE#         53
+  C:0345H         LINE#         54
+  C:034AH         LINE#         55
+  C:034AH         LINE#         56
+  C:034AH         LINE#         57
+  C:034FH         LINE#         58
+  C:0352H         LINE#         59
   -------         ENDPROC       HSCH_DISPATCH_TASKS
   -------         PROC          _HSCH_ADD_TASK
-  D:0021H         SYMBOL        func
-  D:0004H         SYMBOL        delay
-  D:0002H         SYMBOL        period
-  D:0027H         SYMBOL        co_cp
+  D:0008H         SYMBOL        func
+  D:0001H         SYMBOL        param
+  D:000DH         SYMBOL        delay
+  D:000FH         SYMBOL        period
+  D:0011H         SYMBOL        co_cp
   -------         DO            
   D:0007H         SYMBOL        i
   -------         ENDDO         
-  C:028DH         LINE#         68
-  C:0291H         LINE#         69
-  C:0291H         LINE#         70
-  C:0293H         LINE#         71
-  C:02AEH         LINE#         72
-  C:02AEH         LINE#         73
-  C:02AFH         LINE#         74
-  C:02B1H         LINE#         75
-  C:02B6H         LINE#         76
-  C:02B6H         LINE#         77
-  C:02B9H         LINE#         78
-  C:02BCH         LINE#         79
-  C:02BCH         LINE#         80
-  C:02C9H         LINE#         81
-  C:02D6H         LINE#         82
-  C:02E3H         LINE#         83
-  C:02EDH         LINE#         84
-  C:02F7H         LINE#         86
-  C:02F7H         LINE#         87
+  C:0355H         LINE#         71
+  C:0359H         LINE#         72
+  C:0359H         LINE#         73
+  C:035BH         LINE#         74
+  C:037AH         LINE#         75
+  C:037AH         LINE#         76
+  C:037BH         LINE#         77
+  C:037DH         LINE#         78
+  C:0382H         LINE#         79
+  C:0382H         LINE#         80
+  C:0385H         LINE#         81
+  C:0388H         LINE#         82
+  C:0388H         LINE#         83
+  C:039DH         LINE#         84
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 7
+
+
+  C:03B2H         LINE#         85
+  C:03C7H         LINE#         86
+  C:03D8H         LINE#         87
+  C:03E8H         LINE#         88
+  C:03F8H         LINE#         89
+  C:03F8H         LINE#         90
   -------         ENDPROC       _HSCH_ADD_TASK
+  -------         PROC          _HSC_ONCE_TASK
+  D:0006H         SYMBOL        func
+  D:0001H         SYMBOL        param
+  D:0018H         SYMBOL        co_cp
+  C:07A9H         LINE#         98
+  C:07A9H         LINE#         99
+  C:07A9H         LINE#         100
+  -------         ENDPROC       _HSC_ONCE_TASK
   -------         PROC          _HSCH_DELETE_TASK
   D:0007H         SYMBOL        i
   -------         DO            
-  B:0020H.0       SYMBOL        ret_code
+  B:0020H.1       SYMBOL        ret_code
   -------         ENDDO         
-  C:02F8H         LINE#         94
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 6
-
-
-  C:02F8H         LINE#         95
-  C:02F8H         LINE#         97
-  C:0307H         LINE#         98
-  C:0307H         LINE#         99
-  C:030AH         LINE#         100
-  C:030CH         LINE#         101
-  C:030EH         LINE#         103
-  C:030EH         LINE#         104
-  C:0310H         LINE#         105
-  C:0310H         LINE#         106
-  C:031CH         LINE#         107
-  C:0328H         LINE#         108
-  C:0334H         LINE#         109
-  C:033EH         LINE#         111
-  C:0340H         LINE#         112
+  C:0485H         LINE#         108
+  C:0485H         LINE#         109
+  C:0485H         LINE#         111
+  C:049AH         LINE#         112
+  C:049AH         LINE#         113
+  C:049DH         LINE#         114
+  C:049FH         LINE#         115
+  C:04A1H         LINE#         117
+  C:04A1H         LINE#         118
+  C:04A3H         LINE#         119
+  C:04A3H         LINE#         120
+  C:04B5H         LINE#         121
+  C:04C7H         LINE#         122
+  C:04D9H         LINE#         123
+  C:04E9H         LINE#         124
+  C:04F9H         LINE#         126
+  C:04FBH         LINE#         127
   -------         ENDPROC       _HSCH_DELETE_TASK
   -------         PROC          HSCH_UPDATE
   -------         DO            
-  D:0028H         SYMBOL        i
+  D:0012H         SYMBOL        i
   -------         ENDDO         
-  C:002EH         LINE#         117
-  C:004BH         LINE#         119
-  C:004EH         LINE#         120
-  C:0050H         LINE#         121
-  C:0061H         LINE#         122
-  C:0061H         LINE#         123
-  C:0074H         LINE#         124
-  C:0074H         LINE#         125
-  C:0084H         LINE#         126
-  C:0084H         LINE#         128
-  C:0090H         LINE#         129
-  C:0090H         LINE#         130
-  C:009AH         LINE#         131
-  C:009CH         LINE#         134
-  C:009CH         LINE#         135
-  C:00AFH         LINE#         136
-  C:00B9H         LINE#         137
-  C:00C9H         LINE#         138
-  C:00C9H         LINE#         139
-  C:00D7H         LINE#         140
-  C:00D7H         LINE#         141
-  C:00D7H         LINE#         143
-  C:00E8H         LINE#         144
-  C:00E8H         LINE#         145
-  C:00F6H         LINE#         146
-  C:00F6H         LINE#         147
-  C:00F8H         LINE#         150
-  C:00F8H         LINE#         151
-  C:0108H         LINE#         152
-  C:0108H         LINE#         153
-  C:0108H         LINE#         154
-  C:010DH         LINE#         155
+  C:002EH         LINE#         132
+  C:004BH         LINE#         134
+  C:004EH         LINE#         135
+  C:0050H         LINE#         136
+  C:0061H         LINE#         137
+  C:0061H         LINE#         138
+  C:007AH         LINE#         139
+  C:007AH         LINE#         140
+  C:007AH         LINE#         141
+  C:007AH         LINE#         142
+  C:0095H         LINE#         143
+  C:0095H         LINE#         144
+  C:00ABH         LINE#         145
+  C:00AEH         LINE#         146
+  C:00AEH         LINE#         148
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 8
+
+
+  C:00C0H         LINE#         149
+  C:00C0H         LINE#         150
+  C:00D2H         LINE#         151
+  C:00D4H         LINE#         153
+  C:00D4H         LINE#         154
+  C:0104H         LINE#         155
+  C:011AH         LINE#         156
+  C:011AH         LINE#         157
+  C:011FH         LINE#         158
+  C:011FH         LINE#         159
+  C:011FH         LINE#         161
+  C:013BH         LINE#         162
+  C:013BH         LINE#         163
+  C:014FH         LINE#         164
+  C:014FH         LINE#         165
+  C:0154H         LINE#         166
   -------         ENDPROC       HSCH_UPDATE
   -------         PROC          HSCH_INIT_TIMMER2
   -------         DO            
   D:0006H         SYMBOL        i
   -------         ENDDO         
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 7
-
-
-  C:0378H         LINE#         160
-  C:0378H         LINE#         161
-  C:0378H         LINE#         162
-  C:037AH         LINE#         163
-  C:0384H         LINE#         164
-  C:0384H         LINE#         165
-  C:0389H         LINE#         166
-  C:038CH         LINE#         167
-  C:038FH         LINE#         169
-  C:0392H         LINE#         170
-  C:0394H         LINE#         171
-  C:0397H         LINE#         172
-  C:039AH         LINE#         173
-  C:039DH         LINE#         174
-  C:03A0H         LINE#         175
-  C:03A2H         LINE#         176
-  C:03A4H         LINE#         177
+  C:06FDH         LINE#         171
+  C:06FDH         LINE#         172
+  C:06FDH         LINE#         173
+  C:06FFH         LINE#         174
+  C:0709H         LINE#         175
+  C:0709H         LINE#         176
+  C:070EH         LINE#         177
+  C:0711H         LINE#         178
+  C:0714H         LINE#         180
+  C:0717H         LINE#         181
+  C:0719H         LINE#         182
+  C:071CH         LINE#         183
+  C:071FH         LINE#         184
+  C:0722H         LINE#         185
+  C:0725H         LINE#         186
+  C:0727H         LINE#         187
+  C:0729H         LINE#         188
   -------         ENDPROC       HSCH_INIT_TIMMER2
   -------         PROC          HSCH_TO_SLEEP
-  C:03EAH         LINE#         182
-  C:03EAH         LINE#         183
-  C:03EAH         LINE#         184
-  C:03EDH         LINE#         185
+  C:07B8H         LINE#         193
+  C:07B8H         LINE#         194
+  C:07B8H         LINE#         195
+  C:07BBH         LINE#         196
   -------         ENDPROC       HSCH_TO_SLEEP
   -------         PROC          HSCH_START
-  C:03EEH         LINE#         190
-  C:03EEH         LINE#         191
-  C:03EEH         LINE#         192
-  C:03F0H         LINE#         193
+  C:07BCH         LINE#         201
+  C:07BCH         LINE#         202
+  C:07BCH         LINE#         203
+  C:07BEH         LINE#         204
   -------         ENDPROC       HSCH_START
   -------         PROC          HSCH_REPORT_STATUS
-  C:0341H         LINE#         198
-  C:0341H         LINE#         199
-  C:0341H         LINE#         201
-  C:0347H         LINE#         202
-  C:0347H         LINE#         203
-  C:034EH         LINE#         204
-  C:0351H         LINE#         205
-  C:0355H         LINE#         206
-  C:0355H         LINE#         207
-  C:035BH         LINE#         208
-  C:035CH         LINE#         210
-  C:035CH         LINE#         211
-  C:0361H         LINE#         212
-  C:0361H         LINE#         213
-  C:0362H         LINE#         215
-  C:0362H         LINE#         216
-  C:0368H         LINE#         217
-  C:0368H         LINE#         218
-  C:0375H         LINE#         219
-  C:0375H         LINE#         220
-  C:0377H         LINE#         221
-  C:0377H         LINE#         222
-  C:0377H         LINE#         223
-  C:0377H         LINE#         225
+  C:002AH         LINE#         209
+  C:002AH         LINE#         210
+  C:002AH         LINE#         236
   -------         ENDPROC       HSCH_REPORT_STATUS
   -------         ENDMOD        HYBSCH
-BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/29/2021  11:58:30  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 9
 
 
+
+  -------         MODULE        LED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  C:04FCH         PUBLIC        led_flow
+  -------         PROC          LED_FLOW
+  -------         DO            
+  D:0021H         SYMBOL        direct
+  -------         ENDDO         
+  C:04FCH         LINE#         9
+  C:04FCH         LINE#         10
+  C:04FCH         LINE#         13
+  C:0535H         LINE#         15
+  C:0569H         LINE#         16
+  -------         ENDPROC       LED_FLOW
+  -------         ENDMOD        LED
+
+  -------         MODULE        BUTTON
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  C:06C9H         PUBLIC        _btn_dispatch_event
+  C:05CAH         PUBLIC        _btn_unbind_event
+  C:0611H         PUBLIC        _btn_raise_event
+  C:0656H         PUBLIC        _btn_bind_event
+  D:001DH         PUBLIC        btn_press_buff
+  I:0024H         PUBLIC        listeners
+  C:056AH         PUBLIC        btn_poll_scan
+  C:0003H         PUBLIC        _get_button_vol
+  -------         PROC          _BTN_BIND_EVENT
+  D:0007H         SYMBOL        event_type
+  D:0004H         SYMBOL        callback
+  -------         DO            
+  D:0006H         SYMBOL        index
+  -------         ENDDO         
+  C:0656H         LINE#         52
+  C:0656H         LINE#         53
+  C:0656H         LINE#         54
+  C:0658H         LINE#         55
+  C:0662H         LINE#         56
+  C:0662H         LINE#         57
+  C:066DH         LINE#         58
+  C:066DH         LINE#         59
+  C:066DH         LINE#         60
+  C:066DH         LINE#         61
+  C:0670H         LINE#         62
+  C:067AH         LINE#         63
+  C:067AH         LINE#         64
+  C:067BH         LINE#         65
+  C:067BH         LINE#         66
+  C:0685H         LINE#         67
+  C:0692H         LINE#         68
+  C:0693H         LINE#         69
+  -------         ENDPROC       _BTN_BIND_EVENT
+  -------         PROC          _BTN_UNBIND_EVENT
+  D:0001H         SYMBOL        event_type
+  D:0004H         SYMBOL        callback
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 10
+
+
+  D:0007H         SYMBOL        count
+  D:0006H         SYMBOL        index
+  -------         ENDDO         
+  C:05CAH         LINE#         77
+  C:05CCH         LINE#         78
+  C:05CCH         LINE#         79
+  C:05CEH         LINE#         80
+  C:05CFH         LINE#         81
+  C:05D9H         LINE#         82
+  C:05D9H         LINE#         83
+  C:05F6H         LINE#         84
+  C:05F6H         LINE#         85
+  C:0600H         LINE#         86
+  C:060CH         LINE#         87
+  C:060DH         LINE#         88
+  C:060DH         LINE#         89
+  C:0610H         LINE#         90
+  C:0610H         LINE#         91
+  -------         ENDPROC       _BTN_UNBIND_EVENT
+  -------         PROC          _GET_BUTTON_VOL
+  D:0007H         SYMBOL        key_code
+  C:0003H         LINE#         98
+  C:0003H         LINE#         99
+  C:0003H         LINE#         100
+  C:000DH         LINE#         101
+  C:000DH         LINE#         102
+  C:0010H         LINE#         103
+  C:0010H         LINE#         104
+  C:0024H         LINE#         105
+  -------         ENDPROC       _GET_BUTTON_VOL
+  -------         PROC          _BTN_DISPATCH_EVENT
+  D:0007H         SYMBOL        ptr
+  -------         DO            
+  D:000CH         SYMBOL        event
+  -------         ENDDO         
+  C:06C9H         LINE#         110
+  C:06C9H         LINE#         111
+  C:06C9H         LINE#         113
+  C:06CBH         LINE#         114
+  -------         ENDPROC       _BTN_DISPATCH_EVENT
+  -------         PROC          _BTN_RAISE_EVENT
+  D:0009H         SYMBOL        event_type
+  D:000AH         SYMBOL        key_code
+  -------         DO            
+  D:000BH         SYMBOL        i
+  -------         DO            
+  I:0033H         SYMBOL        event
+  -------         ENDDO         
+  -------         ENDDO         
+  C:0611H         LINE#         120
+  C:0615H         LINE#         121
+  C:0615H         LINE#         122
+  C:0618H         LINE#         123
+  C:0623H         LINE#         124
+  C:0623H         LINE#         125
+  C:0641H         LINE#         126
+  C:0641H         LINE#         129
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 11
+
+
+  C:0645H         LINE#         130
+  C:0648H         LINE#         131
+  C:064CH         LINE#         132
+  C:0651H         LINE#         136
+  C:0651H         LINE#         137
+  C:0655H         LINE#         138
+  -------         ENDPROC       _BTN_RAISE_EVENT
+  -------         PROC          BTN_POLL_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        key_code
+  -------         ENDDO         
+  C:056AH         LINE#         143
+  C:056AH         LINE#         144
+  C:056AH         LINE#         145
+  C:056DH         LINE#         146
+  C:0578H         LINE#         147
+  C:0578H         LINE#         148
+  C:0580H         LINE#         149
+  C:0580H         LINE#         151
+  C:058FH         LINE#         152
+  C:058FH         LINE#         153
+  C:0595H         LINE#         154
+  C:0595H         LINE#         155
+  C:059FH         LINE#         156
+  C:059FH         LINE#         157
+  C:05A6H         LINE#         158
+  C:05A6H         LINE#         159
+  C:05A8H         LINE#         161
+  C:05A8H         LINE#         162
+  C:05B7H         LINE#         163
+  C:05B7H         LINE#         164
+  C:05BEH         LINE#         165
+  C:05BEH         LINE#         166
+  C:05C5H         LINE#         167
+  C:05C5H         LINE#         168
+  C:05C9H         LINE#         169
+  -------         ENDPROC       BTN_POLL_SCAN
+  -------         ENDMOD        BUTTON
+
+  -------         MODULE        BEE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  C:07C2H         PUBLIC        bee_alarm_close
+  C:07BFH         PUBLIC        bee_alarm_open
+  B:0080H.0       PUBLIC        bee_port
+  -------         PROC          BEE_ALARM_OPEN
+  C:07BFH         LINE#         8
+  C:07BFH         LINE#         9
+  C:07BFH         LINE#         10
+  C:07C1H         LINE#         11
+  -------         ENDPROC       BEE_ALARM_OPEN
+  -------         PROC          BEE_ALARM_CLOSE
+  C:07C2H         LINE#         16
+  C:07C2H         LINE#         17
+  C:07C2H         LINE#         18
+  C:07C4H         LINE#         19
+  -------         ENDPROC       BEE_ALARM_CLOSE
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/30/2021  22:35:44  PAGE 12
+
+
+  -------         ENDMOD        BEE
+
+  -------         MODULE        ?C?COPY
+  C:023FH         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+  -------         MODULE        ?C?IILDX
+  C:0265H         PUBLIC        ?C?IILDX
+  -------         ENDMOD        ?C?IILDX
 
   -------         MODULE        ?C?ICALL
-  C:001FH         PUBLIC        ?C?ICALL
-  C:0023H         PUBLIC        ?C?ICALL2
+  C:027BH         PUBLIC        ?C?ICALL
+  C:027FH         PUBLIC        ?C?ICALL2
   -------         ENDMOD        ?C?ICALL
+
+  -------         MODULE        ?C_IBP
+  D:0023H         PUBLIC        ?C_IBP
+  -------         ENDMOD        ?C_IBP
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_HARD_DELAY_MS?PREMACRO
@@ -434,5 +687,16 @@ SYMBOL TABLE OF MODULE:  .\OutHex\Demo (?C_STARTUP)
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SOFT_DELAY_MS?PREMACRO
 
-Program Size: data=39.1 xdata=0 code=1008
-LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_HSC_ONCE_TASK?HYBSCH
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_BTN_UNBIND_EVENT?BUTTON
+
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_HSCH_DELETE_TASK?HYBSCH
+    CALLER1: ?C_C51STARTUP
+    CALLER2: ?PR?HSCH_UPDATE?HYBSCH
+
+Program Size: data=54.2 xdata=36 code=1989
+LINK/LOCATE RUN COMPLETE.  5 WARNING(S),  0 ERROR(S)

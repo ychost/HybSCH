@@ -133,13 +133,13 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <LimitSpeedToRealTime>1</LimitSpeedToRealTime>
             <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>0</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>0</RunToMain>
+            <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
             <RestoreWatchpoints>1</RestoreWatchpoints>
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
@@ -149,7 +149,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>-1</TargetSelection>
+          <TargetSelection>0</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -163,7 +163,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver></Driver>
+            <Driver>BIN\MON51.DLL</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -396,6 +396,21 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\HybSCH.c</FilePath>
             </File>
+            <File>
+              <FileName>Led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Led.c</FilePath>
+            </File>
+            <File>
+              <FileName>Button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Button.c</FilePath>
+            </File>
+            <File>
+              <FileName>Bee.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Bee.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -405,6 +420,26 @@
               <FileName>PreMacro.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Headers\PreMacro.h</FilePath>
+            </File>
+            <File>
+              <FileName>Button.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Headers\Button.h</FilePath>
+            </File>
+            <File>
+              <FileName>HybSCH.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Headers\HybSCH.h</FilePath>
+            </File>
+            <File>
+              <FileName>Led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Headers\Led.h</FilePath>
+            </File>
+            <File>
+              <FileName>Bee.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Headers\Bee.h</FilePath>
             </File>
           </Files>
         </Group>

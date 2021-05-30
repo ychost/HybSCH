@@ -3,7 +3,11 @@
         "sbit"
     ],
     "files.associations": {
-        "premacro.h": "c"
+        "premacro.h": "c",
+        "button.h": "c",
+        "led.h": "c",
+        "hybsch.h": "c",
+        "bee.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

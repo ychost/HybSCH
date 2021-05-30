@@ -11,7 +11,7 @@ typedef unsigned char u8;
 typedef unsigned int u16;
 typedef unsigned long u32;
 typedef bit bool;
-typedef void(code *Action)();
+typedef void(code *Action)(void *);
 
 #ifndef true
 #define true 1
