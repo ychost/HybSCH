@@ -1,5 +1,7 @@
-#ifndef __KEY_PRESS_H_
-#define __KEY_PRESS_H_
+#ifndef __KEY_BUTTON_H_
+#define __KEY_BUTTON_H_
+
+#include "./PreMacro.h"
 
 #define KEY_DOWN 2
 #define KEY_UP 3
@@ -17,9 +19,11 @@ typedef idata struct
 /**
  * 当有按键发放 key_down 或者 key_up 的时候会进行回调
  * 默认情况下 reentrant 读取的是 idata，所以 ButtonEvent 也是 idata
+ * 2021-6-6：c51 的 reentrant 有问题，暂时不用结构体回调
  * @see https://www.keil.com/support/man/docs/c51/c51_le_reentrantfuncs.htm
  */
-typedef void(code *ButtonCallback)(ButtonEvent) reentrant;
+// typedef void(code *ButtonCallback)(ButtonEvent) reentrant;
+typedef void(code *ButtonCallback)(u8, u9);
 
 /**
  * 绑定方法

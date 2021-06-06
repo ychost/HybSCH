@@ -41,7 +41,7 @@ ButtonListener listeners[BUTTON_EVENT_MAX];
 /**
  * 按键消抖缓存，即 scan 了多少次
  */
-u8 btn_press_buff[KEY_CODE_MAX];
+u8 idata btn_press_buff[KEY_CODE_MAX];
 
 /**
  * 绑定方法
@@ -105,16 +105,6 @@ u8 get_button_vol(u8 key_code)
 }
 
 /**
- * 派遣事件
- */
-void btn_dispatch_event(void idata *ptr)
-{
-    ButtonEvent *event;
-    event = (ButtonEvent *)ptr;
-    listeners[event->listener_index].callback(*event);
-}
-
-/**
  * 触发所有监听 event_type 的回调
  */
 void btn_raise_event(u8 event_type, u8 key_code)
@@ -124,15 +114,7 @@ void btn_raise_event(u8 event_type, u8 key_code)
     {
         if (listeners[i].event_type == event_type && listeners[i].callback != NULL)
         {
-            // 直接回调
-            ButtonEvent event;
-            event.event_type = event_type;
-            event.key_code = key_code;
-            event.listener_index = i;
-            btn_dispatch_event(&event);
-            // 走任务体系会出异常，应该是 ram 不足
-            // 提交一次性任务
-            // hsc_once_task(btn_dispatch_event, &event, SCH_PRE_TYPE);
+            listeners[i].callback(event_type, key_code);
         }
     }
 }
@@ -142,7 +124,7 @@ void btn_raise_event(u8 event_type, u8 key_code)
  */
 void btn_poll_scan()
 {
-    u8 key_code = 0;
+    u8 idata key_code = 0;
     for (; key_code < KEY_CODE_MAX; key_code += 1)
     {
         if (get_button_vol(key_code) == KEY_DOWN_VOL)

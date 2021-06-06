@@ -133,7 +133,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>1</LimitSpeedToRealTime>
+            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
             <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
@@ -411,6 +411,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\Bee.c</FilePath>
             </File>
+            <File>
+              <FileName>Esp8266Wifi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Esp8266Wifi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -440,6 +445,11 @@
               <FileName>Bee.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Sources\Headers\Bee.h</FilePath>
+            </File>
+            <File>
+              <FileName>Esp8266Wifi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Sources\Headers\Esp8266Wifi.h</FilePath>
             </File>
           </Files>
         </Group>

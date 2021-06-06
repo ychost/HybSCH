@@ -4,6 +4,7 @@
 ".\OutHex\HybSCH.obj",
 ".\OutHex\Led.obj",
 ".\OutHex\Button.obj",
-".\OutHex\Bee.obj" 
+".\OutHex\Bee.obj",
+".\OutHex\Esp8266Wifi.obj" 
 TO ".\OutHex\Demo" 
 PRINT(".\Listings\Demo.m51") RAMSIZE(256) 

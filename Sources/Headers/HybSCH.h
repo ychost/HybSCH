@@ -4,11 +4,18 @@
 //#define SCH_REPORT_STATUS
 #define ERROR_PORT P2
 
+// 默认用 timer2
+#define SCH_TASK_TIMER1
+#ifndef SCH_TASK_TIMER1
+#define SCH_TASK_TIMER2
+#endif
+
 void hsch_dispatch_tasks(void);
 u8 hsch_add_task(Action, void *, u16, u16, u8);
 u8 hsc_once_task(Action, void *, u8);
 bool hsch_delete_task(const u8);
 void hsch_init_timmer2(void);
+void hsch_init_timmer1(void);
 void hsch_start(void);
 void hsch_report_status(void);
 

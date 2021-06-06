@@ -7,7 +7,9 @@
         "button.h": "c",
         "led.h": "c",
         "hybsch.h": "c",
-        "bee.h": "c"
+        "bee.h": "c",
+        "uartprint.h": "c",
+        "esp8266wifi.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

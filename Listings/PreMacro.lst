@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   PREMACRO                                                          05/30/2021 22:35:44 PAGE 1   
+C51 COMPILER V9.59.0.0   PREMACRO                                                          06/06/2021 18:00:00 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE PREMACRO
@@ -10,68 +10,157 @@ line level    source
 
    1          #include "./Headers/PreMacro.h"
    2          
-   3          /**
-   4           * KEIL调试打印输出，使用了定时器1，作为串口的时钟源
-   5           */
-   6          #ifdef DEBUG
-              void printf_init(void)
-              {
-                SCON = 0x52;
-                PCON &= 0x7f;
-                TMOD |= 0x20;
-                TH1 = 0xfD;
-                TL1 = 0xfD;
-                TR1 = 1;
-                TI = 1;
-                ES = 0;
-              }
-              #endif
+   3          u16 soft_delay_count = 0;
+   4          /**
+   5           * KEIL调试打印输出，使用了定时器1，作为串口的时钟源
+   6           */
+   7          #ifdef DEBUG
+   8          void printf_init(void)
+   9          {
+  10   1        SCON = 0x52;
+  11   1        PCON &= 0x7f;
+  12   1        TMOD |= 0x20;
+  13   1        TH1 = 0xfD;
+  14   1        TL1 = 0xfD;
+  15   1        TR1 = 1;
+  16   1        TI = 1;
+  17   1        ES = 0;
+  18   1      }
   19          
   20          /**
-  21           * 硬件延时,T0作为该延时的时钟源
-  22           * @param t 延时的毫秒数
-  23           */
-  24          void hard_delay_ms(const u16 t)
-  25          {
-  26   1        u16 ms;
-  27   1        TMOD &= 0xf0;
-  28   1        TMOD |= 0x01;
-  29   1        ET0 = 0;
-  30   1        for (ms = 0; ms < t; ++ms)
-  31   1        {
-  32   2          TH0 = 0XFC;
-  33   2          TL0 = 0X18;
-  34   2          TF0 = 0;
-  35   2          TR0 = 1;
-  36   2          while (TF0 == 0)
-  37   2            ;
-  38   2          TR0 = 0;
-  39   2        }
-  40   1      }
-  41          
-  42          /**
-  43           * 软件延时
-  44           * @param t 延时的毫秒数
-  45           */
-  46          void soft_delay_ms(const u16 t)
-  47          {
-  48   1        u8 x, y;
-  49   1        for (x = 0; x < t; ++x)
-  50   1        {
-  51   2          for (y = 0; y < 120; ++y)
-  52   2            ;
-  53   2        }
-  54   1      }
-C51 COMPILER V9.59.0.0   PREMACRO                                                          05/30/2021 22:35:44 PAGE 2   
+  21           * 重写 putbyte
+  22           */
+  23          byte putbyte(byte ch)
+  24          {
+  25   1        SBUF = ch;
+  26   1        while (TI == 0)
+  27   1          ;
+  28   1        TI = 0;
+  29   1        return ch;
+  30   1      }
+  31          #endif
+  32          
+  33          /**
+  34           * 硬件延时,T0作为该延时的时钟源
+  35           * @param t 延时的毫秒数
+  36           */
+  37          void hard_delay_ms(const u16 t)
+  38          {
+  39   1        u16 ms;
+  40   1        TMOD &= 0xf0;
+  41   1        TMOD |= 0x01;
+  42   1        ET0 = 0;
+  43   1        for (ms = 0; ms < t; ++ms)
+  44   1        {
+  45   2          TH0 = 0XFC;
+  46   2          TL0 = 0X18;
+  47   2          TF0 = 0;
+  48   2          TR0 = 1;
+  49   2          while (TF0 == 0)
+  50   2            ;
+  51   2          TR0 = 0;
+  52   2        }
+  53   1      }
+  54          
+C51 COMPILER V9.59.0.0   PREMACRO                                                          06/06/2021 18:00:00 PAGE 2   
 
+  55          /**
+  56           * 软件延时
+  57           * @param t 延时的毫秒数
+  58           */
+  59          void soft_delay_ms(const u16 t)
+  60          {
+  61   1        soft_delay_count = t;
+  62   1        while (soft_delay_count != 0)
+  63   1          ;
+  64   1      }
+  65          
+  66          /**
+  67           * 清空字符串
+  68           * @param str 待清空的字符串
+  69           * @return 清空的长度
+  70           */
+  71          u8 string_clear(char *str)
+  72          {
+  73   1        u8 str_len = 0;
+  74   1        while (*str != NULL)
+  75   1        {
+  76   2          str[str_len] = NULL;
+  77   2          str_len += 1;
+  78   2          str += 1;
+  79   2        }
+  80   1        return str_len;
+  81   1      }
+  82          
+  83          /**
+  84           * 往 str 里面追加 append
+  85           * @param str 原始字符串
+  86           * @param append 追加字符串
+  87           * @return str 追加了之后的长度
+  88           */
+  89          u8 string_append(char *str, char *append)
+  90          {
+  91   1        u8 str_len = string_len(str);
+  92   1        while (*append != NULL)
+  93   1        {
+  94   2          str[str_len] = *append;
+  95   2          append += 1;
+  96   2          str_len += 1;
+  97   2        }
+  98   1        return str_len;
+  99   1      }
+ 100          
+ 101          /**
+ 102           * 类似 strlen，但不想引入 string.h
+ 103           */
+ 104          u8 string_len(char *str)
+ 105          {
+ 106   1        u8 i = 0;
+ 107   1        char *str_ptr = str;
+ 108   1        while (*str_ptr != NULL)
+ 109   1        {
+ 110   2          i += 1;
+ 111   2          str_ptr += 1;
+ 112   2        }
+ 113   1        return i;
+ 114   1      }
+ 115          
+ 116          /**
+C51 COMPILER V9.59.0.0   PREMACRO                                                          06/06/2021 18:00:00 PAGE 3   
+
+ 117           * s1 是否包含 s2
+ 118           */
+ 119          bool string_contains(char *s1, char *s2)
+ 120          {
+ 121   1        char *s1_ptr = s1;
+ 122   1        char *s2_ptr = s2;
+ 123   1        if (string_len(s1_ptr) < string_len(s2_ptr))
+ 124   1        {
+ 125   2          return false;
+ 126   2        }
+ 127   1        while (*s1_ptr != NULL && *s2_ptr != NULL)
+ 128   1        {
+ 129   2          if (*s1_ptr == *s2_ptr)
+ 130   2          {
+ 131   3            s2_ptr += 1;
+ 132   3          }
+ 133   2          else
+ 134   2          {
+ 135   3            // 不等就重新置位
+ 136   3            s2_ptr = s2;
+ 137   3          }
+ 138   2          s1_ptr += 1;
+ 139   2        }
+ 140   1        return *s2_ptr == NULL ? true : false;
+ 141   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     69    ----
+   CODE SIZE        =    342    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+   DATA SIZE        =      2      21
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

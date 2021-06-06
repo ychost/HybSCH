@@ -8,11 +8,19 @@ static u8 last_error_code;
 //错误代码输出超时
 static u16 error_tick_count;
 
+extern u16 soft_delay_count;
+
+/**
+ * 随机种子
+ */
+u16 random_seeds = 0;
+
 /**
  * 任务结构体
  * @field func   任务函数
  * @field delay  初次执行延时
  * @field period 执行周期间隔
+ * @field exec_once 是否已经执行了一次
  * @field co_cp  合作/抢占标志
  *               合作：1
  *               抢占：0
@@ -20,11 +28,12 @@ static u16 error_tick_count;
 typedef xdata struct
 {
     Action func;
-    u16 delay;
+    int delay;
     u16 period;
     u8 runme;
     u8 co_cp;
-    void idata *param;
+    u8 exec_once;
+    void *param;
 } hsTask;
 
 //任务集合
@@ -45,9 +54,8 @@ void hsch_dispatch_tasks(void)
     {
         if (hsch_tasks[i].runme > 0 && hsch_tasks[i].co_cp && hsch_tasks[i].func != NULL)
         {
-            hsch_tasks[i].func(hsch_tasks[i].param);
             hsch_tasks[i].runme -= 1;
-
+            hsch_tasks[i].func(hsch_tasks[i].param);
             // 注销一次性函数
             if (hsch_tasks[i].period == 0 && hsch_tasks[i].runme == 0)
             {
@@ -85,6 +93,7 @@ u8 hsch_add_task(Action func, void *param, u16 delay, u16 period, u8 co_cp)
     hsch_tasks[i].period = period;
     hsch_tasks[i].co_cp = co_cp;
     hsch_tasks[i].runme = 0;
+    hsch_tasks[i].exec_once = false;
     hsch_tasks[i].param = param;
     return i;
 }
@@ -121,18 +130,35 @@ bool hsch_delete_task(const u8 i)
     hsch_tasks[i].delay = 0;
     hsch_tasks[i].period = 0;
     hsch_tasks[i].runme = 0;
+    hsch_tasks[i].exec_once = false;
     hsch_tasks[i].param = NULL;
 
     return ret_code;
 }
 
 /**
- * 更新调度器，周期由T2设置
+ * 处理一些全局变量的更新
  */
-void hsch_update(void) interrupt TIMMER2_ITRP
+void hsc_handle_update(void)
+{
+    if (soft_delay_count > 0)
+    {
+        soft_delay_count -= 1;
+    }
+    if (random_seeds == 0xFF)
+    {
+        random_seeds = 0;
+    }
+    random_seeds += 1;
+}
+
+/**
+ * 执行调度任务扫描更新
+ */
+void exec_hsc_update(void)
 {
     u8 i = 0;
-    TF2 = 0;
+    hsc_handle_update();
     for (i = 0; i < SCH_MAX_TASKS; i += 1)
     {
         if (hsch_tasks[i].func == NULL)
@@ -144,13 +170,20 @@ void hsch_update(void) interrupt TIMMER2_ITRP
             hsch_tasks[i].delay -= 1;
             continue;
         }
+        // 非周期任务已经执行了一次就不能再执行了
+        if (hsch_tasks[i].exec_once && hsch_tasks[i].period == 0)
+        {
+            continue;
+        }
+        hsch_tasks[i].exec_once = true;
         //若是合作式则在中断中只置位,等待到hsch_dispatch_tasks中去执行
         if (hsch_tasks[i].co_cp)
         {
             ++hsch_tasks[i].runme;
-        } // 抢占式任务直接执行
+        }
         else
         {
+            // 抢占式任务直接执行
             hsch_tasks[i].func(hsch_tasks[i].param);
             if (hsch_tasks[i].period == 0)
             {
@@ -158,11 +191,18 @@ void hsch_update(void) interrupt TIMMER2_ITRP
             }
         }
         //如果是周期执行则将周期间隔赋予下次执行的延时
-        if (hsch_tasks[i].period > 0)
-        {
-            hsch_tasks[i].delay = hsch_tasks[i].period;
-        }
+        hsch_tasks[i].delay = hsch_tasks[i].period > 0 ? hsch_tasks[i].period : 0;
     }
+}
+
+#ifdef SCH_TASK_TIMER2
+/**
+ * 更新调度器，周期由T2设置
+ */
+void hsch_update(void) interrupt TIMMER2_ITRP
+{
+    TF2 = 0;
+    exec_hsc_update();
 }
 
 /**
@@ -186,7 +226,37 @@ void hsch_init_timmer2(void)
     ET2 = 1;
     TR2 = 1;
 }
-
+#else
+/**
+ * 用 Timer1 作为调度器的时钟源，默认 1ms 为周期
+ */
+void hsch_init_timmer1(void)
+{
+    u8 i = 0;
+    for (i = 0; i < SCH_MAX_TASKS; i += 1)
+    {
+        hsch_delete_task(i);
+    }
+    hsch_error_code = 0;
+    TMOD &= 0x0F;
+    TMOD |= 0x10; //16 位计数器模式
+    ET1 = 1;
+    TH1 = 0XFC;
+    TL1 = 0X65;
+    TF1 = 0;
+    TR1 = 1;
+}
+/**
+ * 更新调度器，周期由T1设置
+ */
+void hsch_update(void) interrupt TIMMER1_ITRP
+{
+    TF1 = 0;
+    TH1 = 0XFC;
+    TL1 = 0X65;
+    exec_hsc_update();
+}
+#endif
 /**
  * 单片机开启休眠
  */

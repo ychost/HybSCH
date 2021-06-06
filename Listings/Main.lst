@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              05/30/2021 22:35:43 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              06/06/2021 18:00:00 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -8,81 +8,128 @@ COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Sources\Main.c OPTIMIZE(8,SPEED)
 
 line level    source
 
-   1          #include "./Headers/PreMacro.h"
-   2          #include "./Headers/HybSCH.h"
-   3          #include "./Headers/Led.h"
-   4          #include "./Headers/Button.h"
-   5          #include "./Headers/Bee.h"
-   6          
-   7          /**
-   8           * 初始化调度器任务
-   9           */
-  10          void hsch_init_tasks()
-  11          {
-  12   1        // 流水灯任务
-  13   1        hsch_add_task(led_flow, NULL, 0, 1000, SCH_COO_TYPE);
-  14   1        // 按键检查任务
-  15   1        hsch_add_task(btn_poll_scan, NULL, 0, 10, SCH_COO_TYPE);
-  16   1      }
-  17          
-  18          /**
-  19           * 根据按键报警，0号按键按下去蜂鸣器响
-  20           */
-  21          // void alarm_switch(u8 event_type, u8 key_code)
-  22          void alarm_switch(ButtonEvent event)
-  23          {
-  24   1        if (event.key_code != 0)
-  25   1        {
-  26   2          return;
-  27   2        }
-  28   1        if (event.event_type == KEY_DOWN)
-  29   1        {
-  30   2          bee_alarm_open();
-  31   2        }
-  32   1        if (event.event_type == KEY_UP)
-  33   1        {
-  34   2          bee_alarm_close();
-  35   2        }
-  36   1      }
-  37          
-  38          /**
-  39           * 初始化按键绑定事件
-  40           */
-  41          void btn_init_listeners()
-  42          {
-  43   1        btn_bind_event(KEY_DOWN, alarm_switch);
-  44   1        btn_bind_event(KEY_UP, alarm_switch);
-  45   1      }
-  46          
-  47          void main(void)
-  48          {
-  49   1        // 1. 初始化调度器，并使用定时器2作为时钟源
-  50   1        hsch_init_timmer2();
-  51   1        // 2. 初始化调度任务
-  52   1        hsch_init_tasks();
-  53   1        // 3. 初始化按键绑定
-  54   1        btn_init_listeners();
-C51 COMPILER V9.59.0.0   MAIN                                                              05/30/2021 22:35:43 PAGE 2   
+   1          #define SCH_TASK_TIMER1
+   2          #include "./Headers/PreMacro.h"
+   3          #include "./Headers/HybSCH.h"
+   4          #include "./Headers/Led.h"
+   5          #include "./Headers/Button.h"
+   6          #include "./Headers/Bee.h"
+   7          #include "./Headers/Esp8266Wifi.h"
+   8          #include <stdio.h>
+   9          #include <stdlib.h>
+  10          
+  11          extern u16 random_seeds;
+  12          
+  13          /**
+  14           * 根据按键报警，0号按键按下去蜂鸣器响
+  15           */
+  16          void alarm_switch(u8 event_type, u8 key_code)
+  17          {
+  18   1        if (event_type == KEY_DOWN)
+  19   1        {
+  20   2          bee_alarm_open();
+  21   2        }
+  22   1        if (event_type == KEY_UP)
+  23   1        {
+  24   2          bee_alarm_close();
+  25   2        }
+  26   1      }
+*** WARNING C280 IN LINE 16 OF Sources\Main.c: 'key_code': unreferenced local variable
+  27          
+  28          /**
+  29           * 模拟采集，并上传数据
+  30           */
+  31          void mock_data_post(u8 event_type, u8 key_code)
+  32          {
+  33   1      
+  34   1        WifiPost xdata mock_post;
+  35   1        char xdata mock_value_str[4];
+  36   1        char xdata mock_name_str[5] = "btn_";
+  37   1        int xdata mock_value = 0;
+  38   1        mock_name_str[4] = '0' + key_code;
+  39   1        // 0-key_code*100 的随机数
+  40   1        mock_value = random_seeds % ((key_code + 1) * 100);
+  41   1        sprintf(mock_value_str, "%d", mock_value);
+  42   1      
+  43   1        mock_post.host = WIFI_HTTP_INFLUXDB_HOST;
+  44   1        mock_post.path = WIFI_HTTP_INFLUXDB_WRITE_PATH;
+  45   1        mock_post.content_type = NULL_STR;
+  46   1        mock_post.body = NULL_STR;
+  47   1        mock_post.influx_db_measure_name = mock_name_str;
+  48   1        mock_post.influx_db_measure_value = mock_value_str;
+  49   1        wifi_exec_post(&mock_post);
+  50   1      }
+*** WARNING C280 IN LINE 31 OF Sources\Main.c: 'event_type': unreferenced local variable
+  51          
+  52          /**
+C51 COMPILER V9.59.0.0   MAIN                                                              06/06/2021 18:00:00 PAGE 2   
 
-  55   1        // 4. 启动调度器
-  56   1        hsch_start();
-  57   1        while (true)
-  58   1        {
-  59   2          // 5. 派遣执行任务
-  60   2          hsch_dispatch_tasks();
-  61   2        }
-  62   1      }
+  53           * 初始化按键绑定事件
+  54           */
+  55          void btn_init_listeners()
+  56          {
+  57   1        // btn_bind_event(KEY_DOWN, alarm_switch);
+  58   1        // btn_bind_event(KEY_UP, alarm_switch);
+  59   1        btn_bind_event(KEY_UP, mock_data_post);
+  60   1      }
+  61          
+  62          /**
+  63           * 初始化调度器任务
+  64           */
+  65          void hsch_init_tasks()
+  66          {
+  67   1        // 流水灯任务
+  68   1        // hsch_add_task(led_flow, NULL, 0, 1000, SCH_COO_TYPE);
+  69   1        // 按键检查任务
+  70   1        // hsch_add_task(btn_poll_scan, NULL, 0, 10, SCH_COO_TYPE);
+  71   1        // WIFI 首次初始化配置，仅需调用一次，后面都是持久化进去的
+  72   1        // hsch_add_task(wifi_first_init, NULL, 5000, 0, SCH_COO_TYPE);
+  73   1        // WIFI 连接 TCP 服务器，延迟 10 秒启动
+  74   1        // WifiPost xdata post;
+  75   1        // post.host = WIFI_HTTP_INFLUXDB_HOST;
+  76   1        // post.path = WIFI_HTTP_INFLUXDB_WRITE_PATH;
+  77   1        // post.body = NULL_STR;
+  78   1        // post.content_type = NULL_STR;
+  79   1        // post.influx_db_measure_name = "p2p";
+  80   1        // post.influx_db_measure_value = "11.1";
+  81   1        // 第 10 秒连接 TCP 服务器
+  82   1        hsch_add_task(wifi_connect_tcp_server, WIFI_CMD_TCP_SERVER, 10000, 0, SCH_COO_TYPE);
+  83   1        hsch_add_task(btn_poll_scan, NULL, 25000, 10, SCH_COO_TYPE);
+  84   1        // 第 25 秒写入数据
+  85   1        // hsch_add_task(wifi_exec_post, &post, 25000, 0, SCH_COO_TYPE);
+  86   1      }
+  87          
+  88          void main(void)
+  89          {
+  90   1        // 初始化 wifi
+  91   1        wifi_init_timer2();
+  92   1        // 1. 初始化调度器，并使用定时器1作为时钟源
+  93   1        hsch_init_timmer1();
+  94   1        // 2. 初始化调度任务
+  95   1        hsch_init_tasks();
+  96   1        // 3. 初始化按键绑定
+  97   1        btn_init_listeners();
+  98   1        // 4. 启动调度器
+  99   1        hsch_start();
+ 100   1        while (true)
+ 101   1        {
+ 102   2          // 5. 派遣执行任务
+ 103   2          hsch_dispatch_tasks();
+ 104   2        }
+ 105   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    111    ----
-   CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   CODE SIZE        =    285    ----
+   CONSTANT SIZE    =     89    ----
+   XDATA SIZE       =   ----      29
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----       3
+   DATA SIZE        =   ----       4
    IDATA SIZE       =   ----    ----
+C51 COMPILER V9.59.0.0   MAIN                                                              06/06/2021 18:00:00 PAGE 3   
+
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -22,33 +22,46 @@ Dialog DLL:      TP51.DLL V2.60.0.0
  
 <h2>Project:</h2>
 C:\Users\ychost\Desktop\Projects\HybSCH\Demo.uvproj
-Project File Date:  05/30/2021
+Project File Date:  06/06/2021
 
 <h2>Output:</h2>
 Rebuild target 'Main'
 assembling STARTUP.A51...
 compiling Main.c...
+Sources\Main.c(16): warning C280: 'key_code': unreferenced local variable
+Sources\Main.c(31): warning C280: 'event_type': unreferenced local variable
 compiling PreMacro.c...
 compiling HybSCH.c...
 compiling Led.c...
 compiling Button.c...
 compiling Bee.c...
+compiling Esp8266Wifi.c...
 linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_ALARM_SWITCH?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?PRINTF_INIT?PREMACRO
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PUTBYTE?PREMACRO
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_HARD_DELAY_MS?PREMACRO
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SOFT_DELAY_MS?PREMACRO
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_HSC_ONCE_TASK?HYBSCH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?LED_FLOW?LED
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_BTN_UNBIND_EVENT?BUTTON
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?WIFI_FIRST_INIT?ESP8266WIFI
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_INIT_MEMPOOL?INIT_MEM
 *** WARNING L15: MULTIPLE CALL TO SEGMENT
     SEGMENT: ?PR?_HSCH_DELETE_TASK?HYBSCH
     CALLER1: ?C_C51STARTUP
     CALLER2: ?PR?HSCH_UPDATE?HYBSCH
-Program Size: data=54.2 xdata=36 code=1989
+Program Size: data=113.3 xdata=213 code=5433
 creating hex file from ".\OutHex\Demo"...
-".\OutHex\Demo" - 0 Error(s), 5 Warning(s).
+".\OutHex\Demo" - 0 Error(s), 12 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>
